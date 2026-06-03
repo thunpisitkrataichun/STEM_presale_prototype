@@ -27,6 +27,7 @@ MODEL_PATH = os.path.join(ROOT, "model", "models",
 META_PATH  = os.path.join(ROOT, "model", "models",
                            "Microsoft Azure", "model_meta.json")
 OUT_TS     = os.path.join(ROOT, "stem_prototype_project", "data", "modelData.ts")
+OUT_TREES  = os.path.join(ROOT, "stem_prototype_project", "data", "modelTrees.json")
 
 SENSORS = ["volt", "rotate", "pressure", "vibration"]
 ROLL_W  = 24   # 24-hour rolling window (matches training)
@@ -158,11 +159,101 @@ for _, row in latest.iterrows():
         "underMaintenance": bool(under_maint_base.get(mid, False)),
     })
 
+# ── Inject M006 as the editable "test machine" ─────────────────────────────
+# M006 is reserved for users to play with — they can edit its sensor values
+# in the UI and re-run the model live.
+M006_BASELINE_INPUTS = {
+    "machineID": "M006",
+    "model": "model3",
+    "age": 5,
+    "volt": 170.0,
+    "rotate": 450.0,
+    "pressure": 100.0,
+    "vibration": 40.0,
+    "underMaintenance": False,
+}
+
+def predict_single(model_name: str, age: int, volt: float, rotate: float,
+                   pressure: float, vibration: float, under_maint: bool) -> float:
+    """Run the trained XGBoost on a single synthetic snapshot."""
+    row = {
+        "age": age, "volt": volt, "rotate": rotate, "pressure": pressure, "vibration": vibration,
+        "has_error": 0, "has_maint": 1 if under_maint else 0,
+        "hour": 12, "dayofweek": 3,
+        "volt_roll_mean_24h": volt, "volt_roll_std_24h": 0.0,
+        "rotate_roll_mean_24h": rotate, "rotate_roll_std_24h": 0.0,
+        "pressure_roll_mean_24h": pressure, "pressure_roll_std_24h": 0.0,
+        "vibration_roll_mean_24h": vibration, "vibration_roll_std_24h": 0.0,
+        "cum_errors": 0, "cum_maint": 0,
+        "model_model1": 1 if model_name == "model1" else 0,
+        "model_model2": 1 if model_name == "model2" else 0,
+        "model_model3": 1 if model_name == "model3" else 0,
+        "model_model4": 1 if model_name == "model4" else 0,
+    }
+    X = np.array([[row[c] for c in feature_cols]], dtype=float)
+    return max(0.0, float(xgb.predict(X)[0]))
+
+m006_dtf = predict_single(
+    M006_BASELINE_INPUTS["model"], M006_BASELINE_INPUTS["age"],
+    M006_BASELINE_INPUTS["volt"], M006_BASELINE_INPUTS["rotate"],
+    M006_BASELINE_INPUTS["pressure"], M006_BASELINE_INPUTS["vibration"],
+    M006_BASELINE_INPUTS["underMaintenance"],
+)
+
+machines = [m for m in machines if m["machineID"] != "M006"]
+machines.append({
+    **M006_BASELINE_INPUTS,
+    "daysToFailure": round(m006_dtf, 1),
+})
+
 # sort by machineID for readability
 machines.sort(key=lambda m: m["machineID"])
 
 last_sync_dt = latest["datetime"].max()
 last_sync_str = last_sync_dt.strftime("%Y-%m-%d %H:%M")
+
+# ── Dump tree structure for in-browser JS inference ────────────────────────
+# Frontend bundles modelTrees.json and runs predictions locally so the demo
+# works fully offline (file:// or zipped dist/).
+print("Dumping trees for JS evaluator ...")
+booster = xgb.get_booster()
+tdf = booster.trees_to_dataframe()
+
+js_trees: list[list[dict]] = []
+for tree_id in sorted(tdf["Tree"].unique()):
+    tree_rows = tdf[tdf["Tree"] == tree_id].sort_values("Node")
+    nodes = []
+    for _, r in tree_rows.iterrows():
+        node_id = int(r["Node"])
+        if r["Feature"] == "Leaf":
+            # for leaves the leaf value is in the 'Gain' column
+            nodes.append({"id": node_id, "leaf": float(r["Gain"])})
+        else:
+            # internal nodes: 'Yes', 'No', 'Missing' are like "0-3" — keep the part after '-'
+            yes_id = int(str(r["Yes"]).split("-")[-1])
+            no_id  = int(str(r["No"]).split("-")[-1])
+            miss   = int(str(r["Missing"]).split("-")[-1])
+            nodes.append({
+                "id": node_id,
+                "f": r["Feature"],
+                "s": float(r["Split"]),
+                "y": yes_id,
+                "n": no_id,
+                "m": miss,
+            })
+    js_trees.append(nodes)
+
+booster_cfg = json.loads(booster.save_config())
+base_score = float(booster_cfg["learner"]["learner_model_param"]["base_score"])
+
+trees_payload = {
+    "baseScore": base_score,
+    "features": feature_cols,
+    "trees": js_trees,
+}
+with open(OUT_TREES, "w", encoding="utf-8") as f:
+    json.dump(trees_payload, f, separators=(",", ":"))
+print(f"   Trees    : {len(js_trees)} trees -> {OUT_TREES}")
 
 # ── Emit TypeScript ────────────────────────────────────────────────────────
 def ts_obj(d: dict) -> str:
@@ -228,6 +319,20 @@ export const RUL_TREND: TrendPoint[] = [
 
 export const LAST_SYNC = "{last_sync_str}";
 export const TOTAL_MACHINES = {len(machines)};
+
+// Editable test machine — UI lets users tweak inputs and re-run the model.
+export const TEST_MACHINE_ID = "M006";
+export const M006_BASELINE: MachinePrediction = {{
+  machineID: "M006",
+  model: "{M006_BASELINE_INPUTS["model"]}",
+  age: {M006_BASELINE_INPUTS["age"]},
+  daysToFailure: {round(m006_dtf, 1)},
+  volt: {M006_BASELINE_INPUTS["volt"]},
+  rotate: {M006_BASELINE_INPUTS["rotate"]},
+  pressure: {M006_BASELINE_INPUTS["pressure"]},
+  vibration: {M006_BASELINE_INPUTS["vibration"]},
+  underMaintenance: {"true" if M006_BASELINE_INPUTS["underMaintenance"] else "false"},
+}};
 """
 
 os.makedirs(os.path.dirname(OUT_TS), exist_ok=True)

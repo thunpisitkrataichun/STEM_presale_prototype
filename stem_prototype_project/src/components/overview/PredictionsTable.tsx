@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-  statusFromDays, STATUS_COLOR,
+  statusFromDays, STATUS_COLOR, TEST_MACHINE_ID,
   type MachinePrediction, type RiskStatus,
 } from "../../../data/modelData";
 import ModelBadge from "./ModelBadge";
@@ -129,7 +129,7 @@ export default function PredictionsTable({ machines, onSelect }: Props) {
             return (
               <tr
                 key={m.machineID}
-                className="clickable"
+                className={"clickable" + (m.machineID === TEST_MACHINE_ID ? " test" : "")}
                 onClick={() => onSelect(m)}
               >
                 <td style={{ fontWeight: 600 }}>{m.machineID}</td>

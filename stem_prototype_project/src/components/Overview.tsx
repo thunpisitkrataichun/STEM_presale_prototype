@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-  MACHINES, RUL_TREND, TOTAL_MACHINES,
+  MACHINES, RUL_TREND, TOTAL_MACHINES, M006_BASELINE, TEST_MACHINE_ID,
   type MachinePrediction,
 } from "../../data/modelData";
 
@@ -11,12 +11,27 @@ import PredictionsPanel from "./overview/PredictionsPanel";
 import MachineDetailModal from "./overview/MachineDetailModal";
 
 export default function Overview() {
-  const [selected, setSelected] = useState<MachinePrediction | null>(null);
+  // Live fleet — M006 may be edited at runtime, so we keep it in state.
+  const [machines, setMachines] = useState<MachinePrediction[]>(MACHINES);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const predictedFailures = MACHINES.filter((m) => m.daysToFailure < 7).length;
+  // Look up the currently-selected machine from state so it reflects edits.
+  const selected = selectedId
+    ? machines.find((m) => m.machineID === selectedId) ?? null
+    : null;
+
+  const predictedFailures = machines.filter((m) => m.daysToFailure < 7).length;
   const avgDays =
-    MACHINES.reduce((s, m) => s + m.daysToFailure, 0) / MACHINES.length;
-  const underMaint = MACHINES.filter((m) => m.underMaintenance).length;
+    machines.reduce((s, m) => s + m.daysToFailure, 0) / machines.length;
+  const underMaint = machines.filter((m) => m.underMaintenance).length;
+
+  const handleSave = (updated: MachinePrediction) => {
+    setMachines((prev) =>
+      prev.map((m) => (m.machineID === updated.machineID ? updated : m)),
+    );
+  };
+
+  const isTest = selected?.machineID === TEST_MACHINE_ID;
 
   return (
     <main className="pdm-main">
@@ -29,15 +44,20 @@ export default function Overview() {
       />
       <ChartsRow
         trend={RUL_TREND}
-        machines={MACHINES}
-        onSelect={setSelected}
+        machines={machines}
+        onSelect={(m) => setSelectedId(m.machineID)}
       />
-      <PredictionsPanel machines={MACHINES} onSelect={setSelected} />
+      <PredictionsPanel
+        machines={machines}
+        onSelect={(m) => setSelectedId(m.machineID)}
+      />
 
       {selected && (
         <MachineDetailModal
           machine={selected}
-          onClose={() => setSelected(null)}
+          baseline={isTest ? M006_BASELINE : undefined}
+          onSave={isTest ? handleSave : undefined}
+          onClose={() => setSelectedId(null)}
         />
       )}
     </main>
