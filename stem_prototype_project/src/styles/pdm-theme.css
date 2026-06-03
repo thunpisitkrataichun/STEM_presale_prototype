@@ -147,3 +147,134 @@ body {
 .pdm-status.watch    { background: var(--blue-50); color: var(--blue-800); }
 .pdm-status.normal   { background: #e6f5ee; color: #1c7a4e; }
 .pdm-days-cell { font-weight: 700; }
+
+/* ── Pagination ─────────────────────────── */
+.pdm-pagination {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 4px; margin-top: 14px; flex-wrap: wrap;
+}
+.pdm-pagination-info {
+  font-size: 12px; color: var(--ink-muted); margin-right: auto;
+}
+.pdm-page-btn {
+  min-width: 32px; height: 30px; padding: 0 8px;
+  font-size: 12px; font-weight: 600; color: var(--ink-soft);
+  background: #fff; border: 1px solid var(--card-border);
+  border-radius: 6px; cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.pdm-page-btn:hover:not(:disabled) {
+  background: var(--blue-50); border-color: var(--blue-200);
+}
+.pdm-page-btn.active {
+  background: var(--blue-700); color: #fff; border-color: var(--blue-700);
+}
+.pdm-page-btn:disabled {
+  opacity: 0.4; cursor: not-allowed;
+}
+.pdm-page-ellipsis {
+  min-width: 32px; height: 30px; padding: 0 6px;
+  font-size: 13px; color: var(--ink-faint);
+  background: #fff; border: 1px dashed var(--card-border);
+  border-radius: 6px; cursor: pointer; font-family: inherit;
+}
+.pdm-page-ellipsis:hover { background: var(--blue-50); color: var(--ink-soft); }
+.pdm-page-input {
+  width: 54px; height: 30px; padding: 0 6px;
+  font-size: 12px; font-family: inherit; color: var(--ink);
+  border: 1px solid var(--blue-500); border-radius: 6px;
+  text-align: center; outline: none;
+}
+
+/* ── Search input ───────────────────────── */
+.pdm-search {
+  height: 30px; padding: 0 10px;
+  font-size: 12px; font-family: inherit; color: var(--ink);
+  background: #fff; border: 1px solid var(--card-border);
+  border-radius: 8px; outline: none; min-width: 200px;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+.pdm-search:focus {
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 3px var(--blue-50);
+}
+.pdm-search::placeholder { color: var(--ink-faint); }
+
+/* ── Clickable rows ─────────────────────── */
+.pdm-table tbody tr.clickable { cursor: pointer; transition: background 0.1s; }
+.pdm-table tbody tr.clickable:hover { background: var(--blue-25); }
+.pdm-risk-item.clickable { cursor: pointer; transition: background 0.1s; padding-left: 4px; padding-right: 4px; margin: 0 -4px; border-radius: 6px; }
+.pdm-risk-item.clickable:hover { background: var(--blue-25); }
+
+/* ── Empty state ────────────────────────── */
+.pdm-empty {
+  text-align: center; padding: 40px 20px;
+  font-size: 13px; color: var(--ink-muted);
+}
+
+/* ── Modal ──────────────────────────────── */
+.pdm-modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(20, 54, 95, 0.55);
+  backdrop-filter: blur(2px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 20px;
+  animation: pdmBackdropIn 0.15s ease-out;
+}
+@keyframes pdmBackdropIn { from { opacity: 0; } to { opacity: 1; } }
+.pdm-modal {
+  background: #fff; border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  width: 100%; max-width: 460px;
+  padding: 22px 24px 20px;
+  box-shadow: 0 20px 60px rgba(20, 54, 95, 0.25);
+  animation: pdmModalIn 0.18s ease-out;
+}
+@keyframes pdmModalIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.pdm-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.pdm-modal-title {
+  font-size: 16px; font-weight: 700; color: var(--ink);
+  display: flex; align-items: center; gap: 10px;
+}
+.pdm-modal-sub { font-size: 11px; color: var(--ink-muted); margin-top: 2px; }
+.pdm-modal-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px;
+  margin-bottom: 20px;
+}
+.pdm-modal-field { display: flex; flex-direction: column; gap: 3px; }
+.pdm-modal-field label {
+  font-size: 10px; color: var(--ink-faint); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.pdm-modal-field span {
+  font-size: 14px; color: var(--ink); font-weight: 600;
+}
+.pdm-modal-footer {
+  display: flex; justify-content: flex-end;
+}
+.pdm-modal-close {
+  background: #fff;
+  color: var(--risk-critical);
+  border: 1px solid var(--risk-critical);
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  padding: 7px 18px; border-radius: 6px;
+  cursor: pointer; transition: background 0.12s, color 0.12s;
+}
+.pdm-modal-close:hover {
+  background: var(--risk-critical); color: #fff;
+}
+.pdm-modal-maint {
+  display: inline-block;
+  font-size: 11px; font-weight: 600; padding: 2px 9px;
+  border-radius: 5px;
+}
+.pdm-modal-maint.yes { background: #fcf2e0; color: #9c6b1e; }
+.pdm-modal-maint.no  { background: #e6f5ee; color: #1c7a4e; }

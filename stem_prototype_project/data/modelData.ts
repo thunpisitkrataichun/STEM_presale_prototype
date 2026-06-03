@@ -39,6 +39,7 @@ export const MACHINES: MachinePrediction[] = [
   { machineID: "M003", model: "model3", age: 8, daysToFailure: 14.4, volt: 168.8, rotate: 554.1, pressure: 102.2, vibration: 42.7, underMaintenance: false },
   { machineID: "M004", model: "model3", age: 7, daysToFailure: 27.2, volt: 192.5, rotate: 460.0, pressure: 116.2, vibration: 38.7, underMaintenance: false },
   { machineID: "M005", model: "model3", age: 2, daysToFailure: 18.6, volt: 159.9, rotate: 437.9, pressure: 90.9, vibration: 37.9, underMaintenance: false },
+ {machineID: "M006 เพิ่มเอง", model: "model3", age: 2, daysToFailure: 18.6, volt: 159.9, rotate: 437.9, pressure: 90.9, vibration: 37.9, underMaintenance: false },
   { machineID: "M007", model: "model3", age: 20, daysToFailure: 44.2, volt: 168.3, rotate: 450.9, pressure: 128.0, vibration: 45.7, underMaintenance: true },
   { machineID: "M008", model: "model3", age: 16, daysToFailure: 34.6, volt: 185.2, rotate: 500.8, pressure: 107.7, vibration: 31.3, underMaintenance: false },
   { machineID: "M009", model: "model4", age: 7, daysToFailure: 4.8, volt: 167.0, rotate: 284.6, pressure: 88.1, vibration: 44.2, underMaintenance: false },
