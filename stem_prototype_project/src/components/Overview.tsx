@@ -2,7 +2,7 @@ import {
   MACHINES, RUL_TREND, TOTAL_MACHINES, LAST_SYNC,
   statusFromDays, STATUS_COLOR,
   type MachinePrediction, type TrendPoint,
-} from "../../data/mockData";
+} from "../../data/modelData";
 import { IconCpu } from "./icons";
 // ── badge บอกว่า "ส่วนนี้ใช้ผลจาก model" ─────────────────
 function ModelBadge({ inline }: { inline?: boolean }) {
