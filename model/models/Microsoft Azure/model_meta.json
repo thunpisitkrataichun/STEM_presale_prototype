@@ -1,0 +1,34 @@
+{
+  "features": [
+    "age",
+    "volt",
+    "rotate",
+    "pressure",
+    "vibration",
+    "has_error",
+    "has_maint",
+    "hour",
+    "dayofweek",
+    "volt_roll_mean_24h",
+    "volt_roll_std_24h",
+    "rotate_roll_mean_24h",
+    "rotate_roll_std_24h",
+    "pressure_roll_mean_24h",
+    "pressure_roll_std_24h",
+    "vibration_roll_mean_24h",
+    "vibration_roll_std_24h",
+    "cum_errors",
+    "cum_maint",
+    "model_model1",
+    "model_model2",
+    "model_model3",
+    "model_model4"
+  ],
+  "target": "days_to_failure",
+  "n_features": 23,
+  "metrics": {
+    "MAE": 17.12,
+    "RMSE": 24.57,
+    "R2": 0.6161
+  }
+}

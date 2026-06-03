@@ -1,1 +1,3 @@
 /.venv
+/model/data/raw
+/model/data/process
