@@ -1,0 +1,149 @@
+:root {
+  --blue-900: #14365f;
+  --blue-800: #1e4d8c;
+  --blue-700: #2a5896;
+  --blue-600: #3268a8;
+  --blue-500: #5fa8e8;
+  --blue-400: #6fa8dc;
+  --blue-200: #bcd8f5;
+  --blue-100: #d6e4f5;
+  --blue-50:  #e3eefb;
+  --blue-25:  #f4f9fe;
+  --page-bg:  #f7fafd;
+
+  --stem-green: #1f9e54;
+  --stem-blue:  #23439c;
+
+  --ink:       #1e4d8c;
+  --ink-soft:  #46618a;
+  --ink-muted: #6f8bab;
+  --ink-faint: #7790ad;
+
+  --risk-critical: #d9534f;
+  --risk-warning:  #e8a33d;
+  --risk-watch:    #5fa8e8;
+  --risk-normal:   #2fab6f;
+
+  --card-border: #d6e4f5;
+  --line: #eef4fc;
+
+  --radius: 10px;
+  --radius-lg: 12px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--page-bg);
+  color: var(--ink);
+}
+
+.pdm-shell { display: flex; min-height: 100vh; }
+
+/* ── Sidebar ─────────────────────────────── */
+.pdm-side {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--blue-800);
+  display: flex;
+  flex-direction: column;
+}
+.pdm-logobox { background: #fff; padding: 16px 12px 14px; text-align: center; }
+.pdm-logo-cap { font-size: 11px; color: var(--ink); font-weight: 600; margin-top: 8px; }
+.pdm-company { font-size: 9px; color: var(--ink-muted); margin-top: 3px; line-height: 1.4; }
+.pdm-navwrap { padding: 16px 0; display: flex; flex-direction: column; flex: 1; }
+.pdm-nav {
+  display: flex; align-items: center; gap: 11px;
+  padding: 11px 20px; color: var(--blue-200);
+  font-size: 13.5px; cursor: pointer;
+  border-left: 3px solid transparent;
+  background: none; border-top: none; border-right: none; border-bottom: none;
+  width: 100%; text-align: left; font-family: inherit;
+  transition: background 0.12s, color 0.12s;
+}
+.pdm-nav:hover { background: var(--blue-700); color: #fff; }
+.pdm-nav.active { background: var(--blue-700); color: #fff; border-left-color: var(--blue-500); font-weight: 600; }
+.pdm-nav.soon { opacity: 0.5; cursor: default; }
+.pdm-nav.soon:hover { background: none; color: var(--blue-200); }
+.pdm-nav svg { width: 17px; height: 17px; flex-shrink: 0; }
+.pdm-soon-badge {
+  font-size: 9px; background: var(--blue-600); color: var(--blue-200);
+  padding: 2px 7px; border-radius: 6px; margin-left: auto;
+}
+.pdm-side-foot {
+  margin-top: auto; padding: 14px 20px;
+  border-top: 1px solid var(--blue-700);
+  color: #7ba6da; font-size: 11px; line-height: 1.6;
+}
+
+/* ── Main ────────────────────────────────── */
+.pdm-main { flex: 1; padding: 24px 28px; min-width: 0; }
+.pdm-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+.pdm-title { font-size: 19px; font-weight: 600; color: var(--ink); margin: 0; }
+.pdm-sub { font-size: 13px; color: var(--ink-muted); margin: 3px 0 0; }
+.pdm-pill {
+  font-size: 12px; color: var(--ink); background: var(--blue-50);
+  border: 1px solid var(--blue-100); padding: 6px 14px;
+  border-radius: 8px; white-space: nowrap;
+}
+
+/* ── KPI cards ───────────────────────────── */
+.pdm-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
+.pdm-kpi {
+  background: #fff; border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 16px; position: relative;
+}
+.pdm-kpi.model { border-color: var(--blue-500); border-width: 1.5px; }
+.pdm-kpi-lbl { font-size: 12px; color: var(--ink-faint); margin: 0 0 10px; min-height: 30px; }
+.pdm-kpi-val { font-size: 27px; font-weight: 700; color: var(--ink); line-height: 1; }
+.pdm-kpi-unit { font-size: 13px; font-weight: 500; color: var(--ink-muted); margin-left: 4px; }
+.pdm-kpi-foot { font-size: 11px; color: var(--ink-muted); margin-top: 8px; }
+.pdm-model-badge {
+  position: absolute; top: 12px; right: 12px;
+  font-size: 9px; background: var(--blue-800); color: var(--blue-200);
+  padding: 3px 7px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;
+}
+.pdm-model-badge svg { width: 10px; height: 10px; }
+
+/* ── Panels ──────────────────────────────── */
+.pdm-row2 { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 18px; }
+.pdm-panel {
+  background: #fff; border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 16px 18px; position: relative;
+}
+.pdm-phead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.pdm-pt { font-size: 13px; color: var(--ink-soft); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.pdm-inline-badge {
+  font-size: 9px; background: var(--blue-800); color: var(--blue-200);
+  padding: 3px 7px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; font-weight: 500;
+}
+.pdm-inline-badge svg { width: 10px; height: 10px; }
+
+/* ── At-risk list ────────────────────────── */
+.pdm-risk-item { display: flex; align-items: center; gap: 11px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.pdm-risk-item:last-child { border-bottom: none; }
+.pdm-led { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.pdm-risk-id { font-size: 13px; font-weight: 600; color: var(--ink); width: 56px; }
+.pdm-risk-meta { font-size: 11px; color: var(--ink-muted); flex: 1; }
+.pdm-risk-days { font-size: 13px; font-weight: 700; }
+
+/* ── Table ───────────────────────────────── */
+.pdm-table-wrap { background: #fff; border: 1px solid var(--card-border); border-radius: var(--radius); padding: 16px 18px; }
+.pdm-table { width: 100%; border-collapse: collapse; }
+.pdm-table th {
+  text-align: left; font-size: 11px; color: var(--ink-faint);
+  font-weight: 600; padding: 8px 10px; border-bottom: 1.5px solid var(--blue-100);
+  text-transform: uppercase; letter-spacing: 0.03em;
+}
+.pdm-table td { font-size: 13px; padding: 11px 10px; border-bottom: 1px solid var(--line); color: var(--ink); }
+.pdm-table tr:last-child td { border-bottom: none; }
+.pdm-status {
+  font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 6px; display: inline-block;
+}
+.pdm-status.critical { background: #fbe9e8; color: #b13b37; }
+.pdm-status.warning  { background: #fcf2e0; color: #9c6b1e; }
+.pdm-status.watch    { background: var(--blue-50); color: var(--blue-800); }
+.pdm-status.normal   { background: #e6f5ee; color: #1c7a4e; }
+.pdm-days-cell { font-weight: 700; }
