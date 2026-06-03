@@ -6,7 +6,7 @@ import {
 import ModelBadge from "./ModelBadge";
 import Pagination from "./Pagination";
 
-type SortKey = "machineID" | "model" | "age" | "daysToFailure" | "status";
+type SortKey = "machineID" | "model" | "age" | "daysToFailure" | "status" | "maint";
 type SortDir = "asc" | "desc";
 
 const STATUS_RANK: Record<RiskStatus, number> = {
@@ -69,6 +69,11 @@ export default function PredictionsTable({ machines, onSelect }: Props) {
           STATUS_RANK[statusFromDays(a.daysToFailure)] -
           STATUS_RANK[statusFromDays(b.daysToFailure)];
         break;
+      case "maint":
+        // false (-) before true (Yes), then by machineID for stability
+        cmp = (a.underMaintenance ? 1 : 0) - (b.underMaintenance ? 1 : 0);
+        if (cmp === 0) cmp = a.machineID.localeCompare(b.machineID);
+        break;
     }
     return sortDir === "asc" ? cmp : -cmp;
   });
@@ -120,6 +125,7 @@ export default function PredictionsTable({ machines, onSelect }: Props) {
             {headerCell("model", "Model")}
             {headerCell("age", "Age")}
             {headerCell("daysToFailure", "Days To Failure")}
+            {headerCell("maint", "Maintenance")}
             {headerCell("status", "Status")}
           </tr>
         </thead>
@@ -137,6 +143,9 @@ export default function PredictionsTable({ machines, onSelect }: Props) {
                 <td>{m.age}</td>
                 <td className="pdm-days-cell" style={{ color: STATUS_COLOR[st] }}>
                   {m.daysToFailure.toFixed(1)}
+                </td>
+                <td className={"pdm-maint-cell" + (m.underMaintenance ? " yes" : "")}>
+                  {m.underMaintenance ? "Yes" : "-"}
                 </td>
                 <td>
                   <span className={"pdm-status " + st.toLowerCase()}>{st}</span>

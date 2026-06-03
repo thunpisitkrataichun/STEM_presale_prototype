@@ -24,10 +24,16 @@ const NAV: NavItem[] = [
 
 // STEM logo recreation (fallback ถ้าไม่มีไฟล์ ./logo.png)
 function StemLogoFallback() {
+  // viewBox is wider than 124 so the italic "STEM" text fits without clipping.
   return (
-    <svg width="124" height="60" viewBox="0 0 124 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="STEM logo">
+    <svg
+      width="150" height="60" viewBox="0 0 150 60"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img" aria-label="STEM logo"
+      style={{ display: "block", maxWidth: "100%" }}
+    >
       <polygon points="38,8 70,54 6,54" fill="none" stroke="#1f9e54" strokeWidth="5" strokeLinejoin="round" />
-      <text x="54" y="42" fontFamily="Georgia, serif" fontSize="27" fontWeight="700" fontStyle="italic" fill="#23439c">STEM</text>
+      <text x="54" y="42" fontFamily="Georgia, serif" fontSize="26" fontWeight="700" fontStyle="italic" fill="#23439c">STEM</text>
     </svg>
   );
 }
@@ -48,7 +54,15 @@ export default function Sidebar({ active, onNavigate }: SidebarProps) {
           <img
             src="./logo.png"
             alt="STEM"
-            style={{ maxWidth: "130px", maxHeight: "62px", display: "block", margin: "0 auto" }}
+            style={{
+              display: "block",
+              margin: "0 auto",
+              maxWidth: "100%",
+              maxHeight: "60px",
+              width: "auto",
+              height: "auto",
+              objectFit: "contain",
+            }}
             onError={() => setLogoOk(false)}
           />
         ) : (
