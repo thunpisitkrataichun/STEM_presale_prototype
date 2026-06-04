@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   WEEKLY_TREND, COMPONENT_COLOR, type FailureComponent,
 } from "../../../data/failureData";
@@ -8,6 +8,7 @@ const COMPS: FailureComponent[] = ["Comp1", "Comp2", "Comp3", "Comp4"];
 export default function FailureTrendPanel() {
   const [hidden, setHidden] = useState<Set<FailureComponent>>(new Set());
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const svgRef = useRef<SVGSVGElement | null>(null);
 
   const data = WEEKLY_TREND;
 
@@ -62,7 +63,7 @@ export default function FailureTrendPanel() {
       </div>
 
       <div style={{ position: "relative" }}>
-        <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H}>
+        <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} width="100%" height={H}>
           {/* Y axis grid + labels */}
           {yTicks.map((t) => (
             <g key={t}>
@@ -125,17 +126,32 @@ export default function FailureTrendPanel() {
           ))}
         </svg>
 
-        {hoverIdx !== null && (
-          <div className="pdm-chart-tooltip" style={{
-            left: `${(x(hoverIdx) / W) * 100}%`,
-            top: `${(y(stacks[hoverIdx]) - 8) / H * 100}%`,
-          }}>
-            <div className="pdm-chart-tooltip-label">{data[hoverIdx].week}</div>
-            <div className="pdm-chart-tooltip-val">
-              {stacks[hoverIdx]}<span>failures</span>
+        {hoverIdx !== null && (() => {
+          // The SVG renders inside the wrapper with `preserveAspectRatio="xMidYMid meet"`
+          // (the default), so its content can be letterboxed inside the element.
+          // Compute the actual pixel offset of the data point so the tooltip
+          // sits on top of it regardless of viewport size.
+          const svgEl = svgRef.current;
+          if (!svgEl) return null;
+          const rect = svgEl.getBoundingClientRect();
+          const scaleX = rect.width / W;
+          const scaleY = rect.height / H;
+          const scale = Math.min(scaleX, scaleY);
+          const renderedW = W * scale;
+          const renderedH = H * scale;
+          const offsetX = (rect.width - renderedW) / 2;
+          const offsetY = (rect.height - renderedH) / 2;
+          const leftPx = offsetX + x(hoverIdx) * scale;
+          const topPx = offsetY + y(stacks[hoverIdx]) * scale - 8;
+          return (
+            <div className="pdm-chart-tooltip" style={{ left: leftPx, top: topPx }}>
+              <div className="pdm-chart-tooltip-label">{data[hoverIdx].week}</div>
+              <div className="pdm-chart-tooltip-val">
+                {stacks[hoverIdx]}<span>failures</span>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
 
       {/* Toggleable legend */}
