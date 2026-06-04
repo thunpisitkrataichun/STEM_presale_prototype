@@ -560,6 +560,91 @@ body {
   background: var(--risk-critical); color: #fff;
   border-radius: 8px; font-size: 9px; text-align: center;
 }
+
+/* ── Failure Analysis ──────────────────────────────────── */
+.pdm-bar-list { display: flex; flex-direction: column; gap: 14px; padding: 6px 0; }
+.pdm-bar-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 120px;
+  gap: 12px; align-items: center;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.pdm-bar-row:hover { background: var(--blue-25); }
+.pdm-bar-row.selected { background: var(--blue-50); outline: 1px solid var(--blue-200); }
+.pdm-bar-label {
+  font-size: 13px; font-weight: 600; color: var(--ink-soft);
+}
+.pdm-bar-track {
+  height: 18px; background: var(--blue-25);
+  border-radius: 3px; overflow: hidden;
+  border: 1px solid var(--blue-50);
+}
+.pdm-bar-fill {
+  height: 100%; transition: width 0.3s, opacity 0.15s;
+}
+.pdm-bar-val { font-size: 12px; color: var(--ink-muted); text-align: right; }
+.pdm-bar-val strong { font-size: 14px; color: var(--ink); }
+.pdm-row-active { background: var(--blue-50) !important; }
+
+/* Heatmap */
+.pdm-heatmap-wrap { padding: 6px 0; position: relative; }
+.pdm-heatmap { border-collapse: separate; border-spacing: 1px; width: 100%; }
+.pdm-heatmap th {
+  font-size: 9px; color: var(--ink-faint); font-weight: 600;
+  padding: 0; text-align: center; min-width: 14px;
+}
+.pdm-heatmap-day {
+  font-size: 10px; color: var(--ink-soft) !important; font-weight: 700 !important;
+  text-align: right !important; padding-right: 6px !important; width: 32px;
+}
+.pdm-heatmap-cell {
+  width: 18px; height: 18px; border-radius: 2px;
+  cursor: pointer; transition: outline 0.1s;
+  position: relative;
+}
+.pdm-heatmap-tooltip {
+  margin-top: 8px;
+  font-size: 12px; color: var(--ink); padding: 6px 10px;
+  background: var(--blue-50); border-radius: 6px; display: inline-block;
+}
+.pdm-heatmap-legend {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 10px;
+  font-size: 10px; color: var(--ink-muted);
+}
+.pdm-heatmap-legend-bar {
+  flex: 0 0 100px; height: 8px; border-radius: 4px;
+  background: linear-gradient(to right, #f4f9fe, #d9534f);
+}
+
+/* Mini sensor charts in failure detail modal */
+.pdm-mini-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.pdm-mini-chart {
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+.pdm-mini-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 4px;
+}
+.pdm-mini-label {
+  font-size: 10px; color: var(--ink-faint); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.pdm-mini-val { font-size: 12px; font-weight: 700; color: var(--ink); }
+.pdm-mini-foot {
+  font-size: 10px; color: var(--ink-muted); text-align: center;
+  margin-top: 2px;
+}
 .pdm-modal-maint {
   display: inline-block;
   font-size: 11px; font-weight: 600; padding: 2px 9px;
