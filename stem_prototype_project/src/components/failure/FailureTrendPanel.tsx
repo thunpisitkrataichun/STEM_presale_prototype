@@ -30,21 +30,6 @@ export default function FailureTrendPanel() {
 
   const yTicks = [0, 0.25, 0.5, 0.75, 1].map((t) => Math.round(niceMax * t));
 
-  // For each component, build a polyline of cumulative stacks (from bottom)
-  const polylines = COMPS.map((c) => {
-    if (hidden.has(c)) return null;
-    const pts = data.map((d, i) => {
-      let cum = 0;
-      for (const cc of COMPS) {
-        if (hidden.has(cc)) continue;
-        cum += d[cc];
-        if (cc === c) break;
-      }
-      return `${x(i)},${y(cum)}`;
-    });
-    return { c, pts: pts.join(" ") };
-  }).filter(Boolean);
-
   const toggle = (c: FailureComponent) => {
     setHidden((prev) => {
       const next = new Set(prev);

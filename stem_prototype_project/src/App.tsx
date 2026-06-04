@@ -3,6 +3,7 @@ import Sidebar, { type PageKey } from "./components/Sidebar";
 import Overview from "./components/Overview";
 import Maintenance from "./components/Maintenance";
 import FailureAnalysis from "./components/FailureAnalysis";
+import Settings from "./components/Settings";
 import "./styles/pdm-theme.css";
 
 // placeholder สำหรับหน้าที่ยังไม่ทำ
@@ -25,7 +26,7 @@ export default function App() {
       {page === "live" && <Placeholder title="Live Monitor" />}
       {page === "failure" && <FailureAnalysis />}
       {page === "maintenance" && <Maintenance />}
-      {page === "settings" && <Placeholder title="Settings" />}
+      {page === "settings" && <Settings />}
     </div>
   );
 }
