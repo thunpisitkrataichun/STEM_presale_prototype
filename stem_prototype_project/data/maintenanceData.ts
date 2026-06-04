@@ -36,11 +36,11 @@ export interface Technician {
 }
 
 export const TECHNICIANS: Technician[] = [
-  { id: "T01", name: "Somchai T.",  specialty: "Mechanical" },
-  { id: "T02", name: "Anan W.",     specialty: "Electrical" },
-  { id: "T03", name: "Wira K.",     specialty: "Inspection" },
-  { id: "T04", name: "Pong S.",     specialty: "Hydraulics" },
-  { id: "T05", name: "Niran B.",    specialty: "General" },
+  { id: "T01", name: "Mechanical Technician", specialty: "Mechanical" },
+  { id: "T02", name: "Electrical Technician", specialty: "Electrical" },
+  { id: "T03", name: "Inspection Officer",    specialty: "Inspection" },
+  { id: "T04", name: "Hydraulics Engineer",   specialty: "Hydraulics" },
+  { id: "T05", name: "General Technician",    specialty: "General" },
 ];
 
 export const MAINTENANCE_TYPES: MaintenanceType[] = [
@@ -75,52 +75,52 @@ function dateOffset(days: number): string {
 export const SEED_JOBS: MaintenanceJob[] = [
   {
     id: "MJ-0001", machineID: "M042", date: dateOffset(1),
-    timeSlot: "morning", type: "Preventive", technician: "Somchai T.",
+    timeSlot: "morning", type: "Preventive", technician: "Mechanical Technician",
     durationHours: 2, notes: "Regular oil change", status: "Scheduled",
   },
   {
     id: "MJ-0002", machineID: "M070", date: dateOffset(1),
-    timeSlot: "afternoon", type: "Corrective", technician: "Anan W.",
+    timeSlot: "afternoon", type: "Corrective", technician: "Electrical Technician",
     durationHours: 4, notes: "Replace worn belt", status: "Scheduled",
   },
   {
     id: "MJ-0003", machineID: "M081", date: dateOffset(0),
-    timeSlot: "morning", type: "Inspection", technician: "Wira K.",
+    timeSlot: "morning", type: "Inspection", technician: "Inspection Officer",
     durationHours: 1, notes: "Vibration check", status: "InProgress",
   },
   {
     id: "MJ-0004", machineID: "M057", date: dateOffset(3),
-    timeSlot: "morning", type: "Preventive", technician: "Somchai T.",
+    timeSlot: "morning", type: "Preventive", technician: "Mechanical Technician",
     durationHours: 2, notes: "", status: "Scheduled",
   },
   {
     id: "MJ-0005", machineID: "M020", date: dateOffset(10),
-    timeSlot: "full", type: "Replacement", technician: "Anan W.",
+    timeSlot: "full", type: "Replacement", technician: "Electrical Technician",
     durationHours: 6, notes: "Replace bearing assembly", status: "Scheduled",
   },
   {
     id: "MJ-0006", machineID: "M099", date: dateOffset(-2),
-    timeSlot: "morning", type: "Preventive", technician: "Pong S.",
+    timeSlot: "morning", type: "Preventive", technician: "Hydraulics Engineer",
     durationHours: 2, notes: "Quarterly service", status: "Completed",
   },
   {
     id: "MJ-0007", machineID: "M018", date: dateOffset(-5),
-    timeSlot: "afternoon", type: "Inspection", technician: "Wira K.",
+    timeSlot: "afternoon", type: "Inspection", technician: "Inspection Officer",
     durationHours: 1, notes: "Annual review", status: "Completed",
   },
   {
     id: "MJ-0008", machineID: "M033", date: dateOffset(-1),
-    timeSlot: "morning", type: "Corrective", technician: "Niran B.",
+    timeSlot: "morning", type: "Corrective", technician: "General Technician",
     durationHours: 3, notes: "", status: "Scheduled",  // overdue
   },
   {
     id: "MJ-0009", machineID: "M044", date: dateOffset(6),
-    timeSlot: "afternoon", type: "Preventive", technician: "Pong S.",
+    timeSlot: "afternoon", type: "Preventive", technician: "Hydraulics Engineer",
     durationHours: 2, notes: "", status: "Scheduled",
   },
   {
     id: "MJ-0010", machineID: "M062", date: dateOffset(14),
-    timeSlot: "morning", type: "Inspection", technician: "Wira K.",
+    timeSlot: "morning", type: "Inspection", technician: "Inspection Officer",
     durationHours: 1, notes: "", status: "Scheduled",
   },
 ];

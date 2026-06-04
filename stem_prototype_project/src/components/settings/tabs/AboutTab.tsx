@@ -50,8 +50,8 @@ export default function AboutTab() {
         padding: 12, background: "var(--blue-25)", borderRadius: 8,
         fontSize: 12, color: "var(--ink-muted)", marginBottom: 18,
       }}>
-        Developed for <strong style={{ color: "var(--ink)" }}>Fujitsu Presale Demo</strong>{" "}
-        · Fully offline · Predictions run in-browser via bundled XGBoost trees.
+        Developed for <strong style={{ color: "var(--ink)" }}>Fujitsu Demo</strong>{" "}
+        · Fully offline · Predictions run in-browser.
       </div>
 
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>

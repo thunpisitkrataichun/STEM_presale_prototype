@@ -95,8 +95,8 @@ export const ROLES: { value: Role; label: string; description: string }[] = [
 
 export const DEFAULT_SETTINGS: SettingsState = {
   profile: {
-    displayName: "K.Thunpisit",
-    email: "SampleMaintemance@stem.co.th",
+    displayName: "Maintenance Lead",
+    email: "maintenance-lead@stem.co.th",
     role: "MaintenanceLead",
     language: "en",
   },
@@ -113,7 +113,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
       browser: true,
       sound: false,
     },
-    recipients: ["SampleMaintemance@stem.co.th", "ops@stem.co.th"],
+    recipients: ["maintenance-lead@stem.co.th", "ops@stem.co.th"],
   },
   thresholds: {
     critical: 7,
@@ -136,11 +136,11 @@ export const DEFAULT_SETTINGS: SettingsState = {
   },
   team: {
     members: [
-      { id: "T01", name: "Somchai T.", specialty: "Mechanical", email: "somchai@stem.co.th" },
-      { id: "T02", name: "Anan W.",    specialty: "Electrical", email: "anan@stem.co.th" },
-      { id: "T03", name: "Wira K.",    specialty: "Inspection", email: "wira@stem.co.th" },
-      { id: "T04", name: "Pong S.",    specialty: "Hydraulics", email: "pong@stem.co.th" },
-      { id: "T05", name: "Niran B.",   specialty: "General",    email: "niran@stem.co.th" },
+      { id: "T01", name: "Mechanical Technician", specialty: "Mechanical", email: "mechanical-tech@stem.co.th" },
+      { id: "T02", name: "Electrical Technician", specialty: "Electrical", email: "electrical-tech@stem.co.th" },
+      { id: "T03", name: "Inspection Officer",    specialty: "Inspection", email: "inspection-officer@stem.co.th" },
+      { id: "T04", name: "Hydraulics Engineer",   specialty: "Hydraulics", email: "hydraulics-eng@stem.co.th" },
+      { id: "T05", name: "General Technician",    specialty: "General",    email: "general-tech@stem.co.th" },
     ],
   },
   data: {
