@@ -152,6 +152,47 @@ body {
 .pdm-maint-cell { color: var(--ink-faint); font-weight: 600; text-align: center; }
 .pdm-maint-cell.yes { color: #9c6b1e; }
 
+/* ── Fleet Status Pie ─────────────────────── */
+.pdm-pie-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 4px 4px;
+}
+.pdm-pie-svg { display: flex; justify-content: center; }
+.pdm-pie-legend {
+  display: flex; flex-direction: column;
+  gap: 4px;
+}
+.pdm-pie-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.pdm-pie-row:hover, .pdm-pie-row.hover {
+  background: var(--blue-25);
+}
+.pdm-pie-swatch {
+  width: 12px; height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.pdm-pie-info { flex: 1; }
+.pdm-pie-label {
+  font-size: 13px; font-weight: 600; color: var(--ink);
+  display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+}
+.pdm-pie-thai {
+  font-size: 11px; color: var(--ink-muted); font-weight: 500;
+}
+.pdm-pie-sub {
+  font-size: 12px; color: var(--ink-muted); margin-top: 1px;
+}
+.pdm-pie-sub strong { font-size: 14px; font-weight: 700; }
+
 /* ── Chart tooltip ──────────────────────── */
 .pdm-chart-tooltip {
   position: absolute;
@@ -382,6 +423,142 @@ body {
 .pdm-modal-error {
   margin-top: 8px;
   font-size: 12px; color: var(--risk-critical);
+}
+
+/* ── Maintenance page ──────────────────────────────────── */
+.pdm-maint-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+/* Calendar */
+.pdm-cal-nav {
+  display: flex; align-items: center; gap: 6px;
+}
+.pdm-cal-title {
+  font-size: 13px; font-weight: 700; color: var(--ink);
+  min-width: 110px; text-align: center;
+}
+.pdm-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.pdm-cal-header { margin-bottom: 6px; }
+.pdm-cal-dow {
+  font-size: 10px; font-weight: 600;
+  color: var(--ink-faint); text-align: center;
+  padding: 4px 0; letter-spacing: 0.04em;
+}
+.pdm-cal-cell {
+  min-height: 60px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 5px;
+  background: #fff;
+  cursor: pointer;
+  display: flex; flex-direction: column;
+  transition: background 0.12s, border-color 0.12s;
+  position: relative;
+}
+.pdm-cal-cell:hover {
+  background: var(--blue-25);
+  border-color: var(--blue-200);
+}
+.pdm-cal-cell.out {
+  background: #fafbfc; opacity: 0.55;
+}
+.pdm-cal-cell.today {
+  background: #fff8e1;
+  border-color: #e8a33d;
+}
+.pdm-cal-cell.selected {
+  border-color: var(--blue-500);
+  border-width: 2px;
+  padding: 3px 4px;
+  background: var(--blue-50);
+}
+.pdm-cal-daynum {
+  font-size: 11px; font-weight: 600; color: var(--ink-soft);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pdm-cal-today-tag {
+  font-size: 8px; background: #e8a33d; color: #fff;
+  padding: 1px 4px; border-radius: 3px; font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.pdm-cal-dots {
+  margin-top: auto;
+  display: flex; flex-wrap: wrap; gap: 3px;
+  align-items: center;
+  padding-top: 4px;
+}
+.pdm-cal-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.pdm-cal-more {
+  font-size: 9px; color: var(--ink-faint); font-weight: 600;
+}
+.pdm-cal-legend {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  margin-top: 12px; padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 11px; color: var(--ink-muted);
+}
+.pdm-cal-legend-item {
+  display: inline-flex; align-items: center; gap: 5px;
+}
+
+/* Booking form */
+.pdm-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.pdm-form-field {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.pdm-form-field label {
+  font-size: 10px; color: var(--ink-faint); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.pdm-radio-row {
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.pdm-radio {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--ink); cursor: pointer;
+  font-weight: 500;
+}
+.pdm-radio input { accent-color: var(--blue-500); }
+
+/* Filter chips for upcoming table */
+.pdm-chip-row {
+  display: flex; gap: 5px; flex-wrap: wrap;
+}
+.pdm-chip {
+  font-size: 11px; font-weight: 600;
+  padding: 4px 10px; border-radius: 14px;
+  background: var(--blue-50); color: var(--ink-soft);
+  border: 1px solid transparent;
+  cursor: pointer; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 5px;
+  transition: background 0.12s, color 0.12s;
+}
+.pdm-chip:hover { background: var(--blue-100); }
+.pdm-chip.active {
+  background: var(--blue-700); color: #fff;
+}
+.pdm-chip-badge {
+  display: inline-block; min-width: 16px;
+  padding: 0 4px;
+  background: var(--risk-critical); color: #fff;
+  border-radius: 8px; font-size: 9px; text-align: center;
 }
 .pdm-modal-maint {
   display: inline-block;

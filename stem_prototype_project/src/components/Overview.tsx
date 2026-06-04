@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-  MACHINES, RUL_TREND, TOTAL_MACHINES, M006_BASELINE, TEST_MACHINE_ID,
+  MACHINES, TOTAL_MACHINES, M006_BASELINE, TEST_MACHINE_ID,
   type MachinePrediction,
 } from "../../data/modelData";
 
@@ -43,7 +43,6 @@ export default function Overview() {
         underMaint={underMaint}
       />
       <ChartsRow
-        trend={RUL_TREND}
         machines={machines}
         onSelect={(m) => setSelectedId(m.machineID)}
       />

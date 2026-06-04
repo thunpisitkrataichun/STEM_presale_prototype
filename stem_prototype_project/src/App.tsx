@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Sidebar, { type PageKey } from "./components/Sidebar";
 import Overview from "./components/Overview";
+import Maintenance from "./components/Maintenance";
 import "./styles/pdm-theme.css";
 
 // placeholder สำหรับหน้าที่ยังไม่ทำ
@@ -22,7 +23,7 @@ export default function App() {
       {page === "overview" && <Overview />}
       {page === "live" && <Placeholder title="Live Monitor" />}
       {page === "failure" && <Placeholder title="Failure Analysis" />}
-      {page === "maintenance" && <Placeholder title="Maintenance" />}
+      {page === "maintenance" && <Maintenance />}
       {page === "settings" && <Placeholder title="Settings" />}
     </div>
   );

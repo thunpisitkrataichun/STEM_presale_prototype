@@ -1,17 +1,16 @@
-import { type MachinePrediction, type TrendPoint } from "../../../data/modelData";
-import RulTrendPanel from "./RulTrendPanel";
+import { type MachinePrediction } from "../../../data/modelData";
+import FleetStatusPanel from "./FleetStatusPanel";
 import AtRiskPanel from "./AtRiskPanel";
 
 interface Props {
-  trend: TrendPoint[];
   machines: MachinePrediction[];
   onSelect: (m: MachinePrediction) => void;
 }
 
-export default function ChartsRow({ trend, machines, onSelect }: Props) {
+export default function ChartsRow({ machines, onSelect }: Props) {
   return (
     <div className="pdm-row2">
-      <RulTrendPanel data={trend} />
+      <FleetStatusPanel machines={machines} />
       <AtRiskPanel machines={machines} onSelect={onSelect} />
     </div>
   );
