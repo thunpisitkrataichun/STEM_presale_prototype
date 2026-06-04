@@ -854,6 +854,194 @@ body {
   from { opacity: 0; transform: translate(-50%, 8px); }
   to { opacity: 1; transform: translate(-50%, 0); }
 }
+
+/* ── Live Monitor ─────────────────────────────────────── */
+.pdm-live-kpis {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.pdm-live-dot {
+  display: inline-block;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #2fab6f;
+  animation: pdmPulse 1.5s ease-in-out infinite;
+}
+.pdm-live-dot.paused { background: #e8a33d; animation: none; }
+@keyframes pdmPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.pdm-live-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+/* Machine cards grid */
+.pdm-live-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+}
+.pdm-live-card {
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+  display: flex; flex-direction: column;
+  min-height: 130px;
+}
+.pdm-live-card:hover {
+  border-color: var(--blue-500);
+  box-shadow: 0 2px 8px rgba(20, 54, 95, 0.08);
+}
+.pdm-live-card.alarm {
+  border-color: var(--risk-critical);
+  background: #fff8f7;
+}
+.pdm-live-card.idle {
+  background: #fafbfc; opacity: 0.85;
+}
+.pdm-live-card.highlighted {
+  outline: 3px solid var(--blue-500);
+  outline-offset: 2px;
+  animation: pdmHighlight 0.8s ease-out 3;
+}
+@keyframes pdmHighlight {
+  0%, 100% { outline-color: var(--blue-500); }
+  50% { outline-color: var(--risk-warning); }
+}
+
+.pdm-live-card-head {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 6px;
+}
+.pdm-live-card-id {
+  font-size: 13px; font-weight: 700; color: var(--ink); flex: 1;
+}
+.pdm-live-card-badge {
+  font-size: 9px; font-weight: 700; padding: 1px 6px;
+  border-radius: 3px; letter-spacing: 0.04em;
+}
+.pdm-live-card-badge.alarm   { background: var(--risk-critical); color: #fff; }
+.pdm-live-card-badge.running { background: #e6f5ee; color: #1c7a4e; }
+.pdm-live-card-badge.idle    { background: #eef0f3; color: var(--ink-muted); }
+
+.pdm-live-card-sensor { margin-bottom: 4px; }
+.pdm-live-card-spark {
+  flex: 1; min-height: 30px;
+  display: flex; align-items: center;
+}
+.pdm-live-card-foot {
+  font-size: 11px; color: var(--ink-muted);
+  margin-top: 4px;
+}
+.pdm-live-card-idle {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  color: var(--ink-muted); font-size: 13px;
+  text-align: center;
+}
+
+/* Active alarms panel */
+.pdm-alarm-list {
+  display: flex; flex-direction: column; gap: 8px;
+  max-height: 380px; overflow-y: auto;
+}
+.pdm-alarm-card {
+  background: #fff8f7;
+  border: 1px solid #f5cdc9;
+  border-left: 3px solid var(--risk-critical);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+.pdm-alarm-head {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 4px;
+}
+.pdm-alarm-led {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--risk-critical);
+  animation: pdmPulse 1.2s ease-in-out infinite;
+}
+.pdm-alarm-machine {
+  background: none; border: none; padding: 0;
+  font-family: inherit; font-size: 13px; font-weight: 700;
+  color: var(--blue-800); cursor: pointer;
+  text-decoration: underline; text-decoration-style: dotted;
+}
+.pdm-alarm-body { margin-bottom: 6px; color: var(--ink); }
+.pdm-alarm-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11px; color: var(--ink-muted);
+}
+.pdm-alarm-ack {
+  background: #fff; border: 1px solid var(--risk-normal);
+  color: var(--risk-normal); font-family: inherit;
+  font-size: 11px; font-weight: 600; cursor: pointer;
+  padding: 2px 8px; border-radius: 4px;
+  transition: background 0.12s, color 0.12s;
+}
+.pdm-alarm-ack:hover { background: var(--risk-normal); color: #fff; }
+.pdm-alarm-history {
+  margin-top: 12px;
+  padding: 8px 10px;
+  background: var(--blue-25);
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+/* Fleet heatmap */
+.pdm-fleet-heat {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  gap: 2px;
+  margin: 6px 0;
+}
+.pdm-fleet-heat-cell {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8px;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  transition: transform 0.1s;
+}
+.pdm-fleet-heat-cell:hover {
+  transform: scale(1.15);
+  outline: 1.5px solid var(--blue-700);
+  z-index: 1;
+}
+.pdm-fleet-heat-id { letter-spacing: -0.02em; }
+.pdm-fleet-heat-tooltip {
+  margin-top: 10px; padding: 6px 12px;
+  background: var(--blue-50); border-radius: 6px;
+  font-size: 12px; color: var(--ink); display: inline-block;
+}
+.pdm-fleet-heat-legend {
+  margin-top: 10px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--ink-muted);
+  flex-wrap: wrap;
+}
+.pdm-fleet-heat-legend-bar {
+  width: 100px; height: 8px; border-radius: 4px;
+  background: linear-gradient(to right, #f4f9fe, #d9534f);
+}
+.pdm-fleet-heat-legend-swatch {
+  display: inline-block;
+  width: 12px; height: 12px; border-radius: 3px;
+  vertical-align: middle; margin-right: 4px;
+}
 .pdm-modal-maint {
   display: inline-block;
   font-size: 11px; font-weight: 600; padding: 2px 9px;
