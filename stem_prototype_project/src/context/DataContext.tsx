@@ -25,6 +25,8 @@ interface DataContextValue {
   // Machine fleet
   machines: MachinePrediction[];
   setMachines: (m: MachinePrediction[]) => void;
+  addMachine: (m: MachinePrediction) => void;
+  deleteMachine: (id: string) => void;
 
   // Upload state
   uploadInfo: UploadInfo | null;
@@ -72,6 +74,14 @@ export function DataContextProvider({ children }: { children: ReactNode }) {
     setMachinesRaw(m);
   }, []);
 
+  const addMachine = useCallback((m: MachinePrediction) => {
+    setMachinesRaw(prev => [...prev, m]);
+  }, []);
+
+  const deleteMachine = useCallback((id: string) => {
+    setMachinesRaw(prev => prev.filter(m => m.machineID !== id));
+  }, []);
+
   const loadFromXlsx = useCallback(async (file: File) => {
     setIsUploading(true);
     setUploadError(null);
@@ -103,6 +113,8 @@ export function DataContextProvider({ children }: { children: ReactNode }) {
       value={{
         machines,
         setMachines,
+        addMachine,
+        deleteMachine,
         uploadInfo,
         isUploading,
         uploadError,

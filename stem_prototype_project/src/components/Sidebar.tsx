@@ -1,10 +1,10 @@
 import { useState } from "react";
 import {
   IconDashboard, IconActivity, IconAlert,
-  IconMicroscope, IconCalendar, IconSettings,
+  IconMicroscope, IconCalendar, IconSettings, IconDatabase,
 } from "./icons";
 
-export type PageKey = "overview" | "live" | "anomaly" | "failure" | "maintenance" | "settings";
+export type PageKey = "overview" | "live" | "anomaly" | "failure" | "maintenance" | "data" | "settings";
 
 interface NavItem {
   key: PageKey;
@@ -19,6 +19,7 @@ const NAV: NavItem[] = [
   { key: "anomaly",     label: "Anomaly",          icon: <IconAlert />, soon: true },
   { key: "failure",     label: "Failure Analysis", icon: <IconMicroscope /> },
   { key: "maintenance", label: "Maintenance",      icon: <IconCalendar /> },
+  { key: "data",        label: "Data Management",  icon: <IconDatabase /> },
   { key: "settings",    label: "Settings",         icon: <IconSettings /> },
 ];
 

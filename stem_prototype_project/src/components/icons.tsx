@@ -68,3 +68,11 @@ export const IconCpu = ({ size = 10, style }: IconProps) => (
     <path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2" />
   </svg>
 );
+
+export const IconDatabase = ({ size = 17, style }: IconProps) => (
+  <svg {...base(size)} style={style} aria-hidden="true">
+    <ellipse cx="12" cy="5" rx="9" ry="3" />
+    <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5" />
+    <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3" />
+  </svg>
+);

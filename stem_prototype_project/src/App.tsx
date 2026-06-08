@@ -5,6 +5,7 @@ import Maintenance from "./components/Maintenance";
 import FailureAnalysis from "./components/FailureAnalysis";
 import LiveMonitor from "./components/LiveMonitor";
 import Settings from "./components/Settings";
+import DataManagement from "./components/DataManagement";
 import { DataContextProvider } from "./context/DataContext";
 import "./styles/pdm-theme.css";
 
@@ -19,6 +20,7 @@ export default function App() {
         {page === "live" && <LiveMonitor />}
         {page === "failure" && <FailureAnalysis />}
         {page === "maintenance" && <Maintenance />}
+        {page === "data" && <DataManagement />}
         {page === "settings" && <Settings />}
       </div>
     </DataContextProvider>

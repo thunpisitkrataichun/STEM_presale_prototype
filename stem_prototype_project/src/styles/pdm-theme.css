@@ -1124,3 +1124,118 @@ body {
   cursor: pointer;
 }
 .pdm-xlsx-reset:hover { background: var(--blue-50); color: var(--ink); }
+
+/* ── Data Management (CRUD) ──────────────────────────────── */
+.pdm-crud-add-btn {
+  background: var(--blue-800); color: #fff;
+  border: none; border-radius: 8px;
+  padding: 9px 18px; font-size: 13px; font-weight: 600;
+  font-family: inherit; cursor: pointer;
+  transition: background 0.12s;
+  white-space: nowrap;
+}
+.pdm-crud-add-btn:hover { background: var(--blue-700); }
+
+.pdm-crud-toolbar {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 14px;
+}
+.pdm-crud-search {
+  flex: 1; max-width: 320px;
+  height: 34px; padding: 0 12px;
+  font-size: 13px; font-family: inherit; color: var(--ink);
+  background: #fff; border: 1px solid var(--card-border);
+  border-radius: 8px; outline: none;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+.pdm-crud-search:focus {
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 3px var(--blue-50);
+}
+.pdm-crud-count {
+  font-size: 12px; color: var(--ink-muted);
+  margin-left: auto;
+}
+
+.pdm-crud-table-wrap {
+  overflow-x: auto;
+  padding: 0;
+}
+.pdm-crud-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px;
+}
+.pdm-crud-table thead tr {
+  background: var(--blue-25);
+  border-bottom: 1px solid var(--line);
+}
+.pdm-crud-table th {
+  padding: 10px 12px;
+  text-align: left; font-size: 11px; font-weight: 600;
+  color: var(--ink-faint); text-transform: uppercase;
+  letter-spacing: 0.04em; white-space: nowrap;
+  cursor: pointer; user-select: none;
+  transition: color 0.1s;
+}
+.pdm-crud-table th:hover { color: var(--ink); }
+.pdm-crud-th-sorted { color: var(--blue-800) !important; }
+.pdm-crud-sort-arrow { margin-left: 4px; font-size: 9px; }
+.pdm-crud-th-actions {
+  text-align: right; cursor: default !important;
+}
+.pdm-crud-row td {
+  padding: 9px 12px; border-bottom: 1px solid var(--line);
+  color: var(--ink); vertical-align: middle;
+}
+.pdm-crud-row:last-child td { border-bottom: none; }
+.pdm-crud-row:hover td { background: var(--blue-25); }
+
+.pdm-crud-maint-badge {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 5px;
+}
+.pdm-crud-maint-badge.yes { background: #fcf2e0; color: #9c6b1e; }
+.pdm-crud-maint-badge.no  { background: #e6f5ee; color: #1c7a4e; }
+
+.pdm-crud-days { font-weight: 700; }
+
+.pdm-crud-action-btns {
+  display: flex; gap: 6px; justify-content: flex-end;
+}
+.pdm-crud-btn-edit,
+.pdm-crud-btn-delete {
+  font-family: inherit; font-size: 11px; font-weight: 600;
+  padding: 4px 10px; border-radius: 5px;
+  cursor: pointer; transition: background 0.12s, color 0.12s;
+  border: 1px solid transparent;
+}
+.pdm-crud-btn-edit {
+  background: var(--blue-50); color: var(--blue-800);
+  border-color: var(--blue-100);
+}
+.pdm-crud-btn-edit:hover { background: var(--blue-100); }
+.pdm-crud-btn-delete {
+  background: #fff0f0; color: var(--risk-critical);
+  border-color: #f5cdc9;
+}
+.pdm-crud-btn-delete:hover { background: var(--risk-critical); color: #fff; }
+
+.pdm-crud-empty {
+  text-align: center; padding: 40px !important;
+  color: var(--ink-muted); font-size: 13px;
+}
+
+/* Delete confirm button inside modal */
+.pdm-crud-btn-del-confirm {
+  color: #fff !important;
+  background: var(--risk-critical) !important;
+  border-color: var(--risk-critical) !important;
+}
+.pdm-crud-btn-del-confirm:hover {
+  background: #b83232 !important;
+  border-color: #b83232 !important;
+}
+
+/* CRUD modal — wider than default */
+.pdm-crud-modal { max-width: 560px !important; }
