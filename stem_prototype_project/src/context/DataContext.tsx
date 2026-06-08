@@ -1,8 +1,27 @@
 import {
-  createContext, useContext, useState, useCallback,
+  createContext, useContext, useState, useCallback, useEffect,
   type ReactNode,
 } from "react";
 import { MACHINES, type MachinePrediction } from "../../data/modelData";
+
+const LS_MACHINES = "pdm_machines";
+const LS_UPLOAD   = "pdm_uploadInfo";
+
+function loadMachines(): MachinePrediction[] {
+  try {
+    const raw = localStorage.getItem(LS_MACHINES);
+    if (raw) return JSON.parse(raw) as MachinePrediction[];
+  } catch { /* ignore */ }
+  return MACHINES;
+}
+
+function loadUploadInfo(): UploadInfo | null {
+  try {
+    const raw = localStorage.getItem(LS_UPLOAD);
+    if (raw) return JSON.parse(raw) as UploadInfo;
+  } catch { /* ignore */ }
+  return null;
+}
 import { parseXlsx, type ParseError } from "../lib/xlsxParser";
 import {
   deriveFailureData, deriveSeedJobs,
@@ -51,12 +70,24 @@ interface DataContextValue {
 const DataContext = createContext<DataContextValue | null>(null);
 
 export function DataContextProvider({ children }: { children: ReactNode }) {
-  const [machines, setMachinesRaw] = useState<MachinePrediction[]>(MACHINES);
-  const [uploadInfo, setUploadInfo] = useState<UploadInfo | null>(null);
+  const [machines, setMachinesRaw] = useState<MachinePrediction[]>(loadMachines);
+  const [uploadInfo, setUploadInfo] = useState<UploadInfo | null>(loadUploadInfo);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<ParseError | null>(null);
   const [failure, setFailure] = useState<DerivedFailureData>(STATIC_FAILURE);
   const [seedJobs, setSeedJobs] = useState<MaintenanceJob[]>(STATIC_MAINTENANCE);
+
+  // Auto-save to localStorage whenever machines or uploadInfo changes
+  useEffect(() => {
+    try { localStorage.setItem(LS_MACHINES, JSON.stringify(machines)); } catch { /* ignore */ }
+  }, [machines]);
+
+  useEffect(() => {
+    try {
+      if (uploadInfo) localStorage.setItem(LS_UPLOAD, JSON.stringify(uploadInfo));
+      else localStorage.removeItem(LS_UPLOAD);
+    } catch { /* ignore */ }
+  }, [uploadInfo]);
 
   // Re-derive when machines change (only after a file upload)
   const applyMachines = useCallback(
@@ -101,6 +132,8 @@ export function DataContextProvider({ children }: { children: ReactNode }) {
   }, [applyMachines]);
 
   const resetToDefault = useCallback(() => {
+    localStorage.removeItem(LS_MACHINES);
+    localStorage.removeItem(LS_UPLOAD);
     setMachinesRaw(MACHINES);
     setUploadInfo(null);
     setUploadError(null);
