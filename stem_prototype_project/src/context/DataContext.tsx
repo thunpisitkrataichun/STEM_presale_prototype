@@ -1,5 +1,5 @@
 import {
-  createContext, useContext, useState, useCallback, useEffect,
+  createContext, useContext, useState, useCallback,
   type ReactNode,
 } from "react";
 import { MACHINES, type MachinePrediction } from "../../data/modelData";
