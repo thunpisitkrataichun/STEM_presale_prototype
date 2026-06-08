@@ -1,7 +1,6 @@
-import { useState } from "react";
-import {
-  type MaintenanceJob, SEED_JOBS, todayISO,
-} from "../../data/maintenanceData";
+import { useState, useEffect } from "react";
+import { type MaintenanceJob, todayISO } from "../../data/maintenanceData";
+import { useDataContext } from "../context/DataContext";
 
 import MaintenanceHeader from "./maintenance/MaintenanceHeader";
 import MaintenanceKpiSection from "./maintenance/MaintenanceKpiSection";
@@ -11,8 +10,12 @@ import UpcomingTable from "./maintenance/UpcomingTable";
 import MaintenanceJobModal from "./maintenance/MaintenanceJobModal";
 
 export default function Maintenance() {
-  const [jobs, setJobs] = useState<MaintenanceJob[]>(SEED_JOBS);
+  const { seedJobs } = useDataContext();
+  const [jobs, setJobs] = useState<MaintenanceJob[]>(seedJobs);
   const [selectedDate, setSelectedDate] = useState<string>(todayISO());
+
+  // Re-seed when a new file is uploaded
+  useEffect(() => { setJobs(seedJobs); }, [seedJobs]);
   const [editingJob, setEditingJob] = useState<MaintenanceJob | null>(null);
 
   // ── Mutations ─────────────────────────────────────────────────────────

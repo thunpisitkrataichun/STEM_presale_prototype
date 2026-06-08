@@ -1,4 +1,4 @@
-import { FAILURE_KPIS } from "../../../data/failureData";
+import { useDataContext } from "../../context/DataContext";
 
 function Delta({ now, prev, lowerBetter }: { now: number; prev: number; lowerBetter?: boolean }) {
   const diff = now - prev;
@@ -12,7 +12,7 @@ function Delta({ now, prev, lowerBetter }: { now: number; prev: number; lowerBet
 }
 
 export default function FailureKpiSection() {
-  const k = FAILURE_KPIS;
+  const k = useDataContext().failureKpis;
   return (
     <div className="pdm-kpis">
       <div className="pdm-kpi">

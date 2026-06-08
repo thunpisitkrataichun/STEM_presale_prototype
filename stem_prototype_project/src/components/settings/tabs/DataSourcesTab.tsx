@@ -1,5 +1,6 @@
 import { type DataSettings } from "../../../../data/settingsData";
 import { LAST_SYNC } from "../../../../data/modelData";
+import XlsxUploader from "../../XlsxUploader";
 
 interface Props {
   value: DataSettings;
@@ -93,6 +94,8 @@ export default function DataSourcesTab({ value, onChange }: Props) {
           ↻ Refresh Now
         </button>
       </div>
+
+      <XlsxUploader />
 
       <h3 className="pdm-settings-h3">Export Data</h3>
       <div className="pdm-toggle-list">

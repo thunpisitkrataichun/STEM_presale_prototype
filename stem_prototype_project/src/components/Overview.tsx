@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  MACHINES, TOTAL_MACHINES, M006_BASELINE, TEST_MACHINE_ID,
+  M006_BASELINE, TEST_MACHINE_ID,
   type MachinePrediction,
 } from "../../data/modelData";
+import { useDataContext } from "../context/DataContext";
 
 import OverviewHeader from "./overview/OverviewHeader";
 import KpiSection from "./overview/KpiSection";
@@ -11,25 +12,32 @@ import PredictionsPanel from "./overview/PredictionsPanel";
 import MachineDetailModal from "./overview/MachineDetailModal";
 
 export default function Overview() {
-  // Live fleet — M006 may be edited at runtime, so we keep it in state.
-  const [machines, setMachines] = useState<MachinePrediction[]>(MACHINES);
+  const { machines: contextMachines, setMachines: setContextMachines, uploadInfo } = useDataContext();
+  const [machines, setMachinesLocal] = useState<MachinePrediction[]>(contextMachines);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  // Look up the currently-selected machine from state so it reflects edits.
+  // Sync local state when a new xlsx is loaded or data is reset
+  useEffect(() => {
+    setMachinesLocal(contextMachines);
+    setSelectedId(null);
+  }, [contextMachines]);
+
+  const updateMachine = (updated: MachinePrediction) => {
+    const next = machines.map((m) => (m.machineID === updated.machineID ? updated : m));
+    setMachinesLocal(next);
+    setContextMachines(next);
+  };
+
   const selected = selectedId
     ? machines.find((m) => m.machineID === selectedId) ?? null
     : null;
 
   const predictedFailures = machines.filter((m) => m.daysToFailure < 7).length;
-  const avgDays =
-    machines.reduce((s, m) => s + m.daysToFailure, 0) / machines.length;
+  const avgDays = machines.length > 0
+    ? machines.reduce((s, m) => s + m.daysToFailure, 0) / machines.length
+    : 0;
   const underMaint = machines.filter((m) => m.underMaintenance).length;
-
-  const handleSave = (updated: MachinePrediction) => {
-    setMachines((prev) =>
-      prev.map((m) => (m.machineID === updated.machineID ? updated : m)),
-    );
-  };
+  const totalMachines = uploadInfo ? uploadInfo.rowCount : machines.length;
 
   const isTest = selected?.machineID === TEST_MACHINE_ID;
 
@@ -37,7 +45,7 @@ export default function Overview() {
     <main className="pdm-main">
       <OverviewHeader />
       <KpiSection
-        total={TOTAL_MACHINES}
+        total={totalMachines}
         predictedFailures={predictedFailures}
         avgDays={avgDays}
         underMaint={underMaint}
@@ -55,7 +63,7 @@ export default function Overview() {
         <MachineDetailModal
           machine={selected}
           baseline={isTest ? M006_BASELINE : undefined}
-          onSave={isTest ? handleSave : undefined}
+          onSave={isTest ? updateMachine : undefined}
           onClose={() => setSelectedId(null)}
         />
       )}

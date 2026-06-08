@@ -1,8 +1,6 @@
 import { useState, useMemo } from "react";
-import {
-  FAILURE_EVENTS, COMPONENT_COLOR,
-  type FailureEvent, type FailureComponent,
-} from "../../../data/failureData";
+import { COMPONENT_COLOR, type FailureEvent, type FailureComponent } from "../../../data/failureData";
+import { useDataContext } from "../../context/DataContext";
 import Pagination from "../overview/Pagination";
 
 const PAGE_SIZE = 15;
@@ -26,14 +24,13 @@ function formatDateTime(iso: string): string {
 export default function FailureEventsTable({
   rangeDays, componentFilter, machineFilter, onSelectEvent, onClearFilters,
 }: Props) {
+  const FAILURE_EVENTS = useDataContext().failureEvents;
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [localCompFilter, setLocalCompFilter] = useState<FailureComponent | "all">("all");
 
-  // Combine local component chip filter with external filter from bar chart
   const effectiveComp = componentFilter ?? (localCompFilter === "all" ? null : localCompFilter);
 
-  // Use the dataset's latest datetime as the reference "now"
   const cutoffISO = useMemo(() => {
     const max = FAILURE_EVENTS.reduce(
       (m, e) => e.datetime > m ? e.datetime : m, FAILURE_EVENTS[0]?.datetime ?? "",
@@ -41,7 +38,7 @@ export default function FailureEventsTable({
     const d = new Date(max);
     d.setDate(d.getDate() - rangeDays);
     return d.toISOString();
-  }, [rangeDays]);
+  }, [rangeDays, FAILURE_EVENTS]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -52,7 +49,7 @@ export default function FailureEventsTable({
       if (q && !e.machineID.toLowerCase().includes(q)) return false;
       return true;
     }).sort((a, b) => b.datetime.localeCompare(a.datetime));
-  }, [cutoffISO, effectiveComp, machineFilter, search]);
+  }, [cutoffISO, effectiveComp, machineFilter, search, FAILURE_EVENTS]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const cur = Math.min(page, totalPages);

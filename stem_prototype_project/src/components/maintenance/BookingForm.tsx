@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { MACHINES } from "../../../data/modelData";
+import { useDataContext } from "../../context/DataContext";
 import {
   type MaintenanceJob, type MaintenanceType, type TimeSlot,
   TECHNICIANS, MAINTENANCE_TYPES, todayISO,
@@ -31,6 +31,7 @@ export default function BookingForm({
     return () => clearTimeout(t);
   }, [success]);
 
+  const MACHINES = useDataContext().machines;
   const machineOptions = MACHINES
     .filter((m) => !machineSearch || m.machineID.toLowerCase().includes(machineSearch.toLowerCase()))
     .slice(0, 30);

@@ -1,5 +1,5 @@
-import { TOP_OFFENDERS } from "../../../data/failureData";
-import { MACHINES, statusFromDays, STATUS_COLOR } from "../../../data/modelData";
+import { statusFromDays, STATUS_COLOR } from "../../../data/modelData";
+import { useDataContext } from "../../context/DataContext";
 
 interface Props {
   onSelectMachine: (machineID: string | null) => void;
@@ -7,7 +7,8 @@ interface Props {
 }
 
 export default function TopOffendersPanel({ onSelectMachine, selected }: Props) {
-  const maxCount = Math.max(...TOP_OFFENDERS.map((o) => o.count));
+  const { topOffenders: TOP_OFFENDERS, machines: MACHINES } = useDataContext();
+  const maxCount = Math.max(...TOP_OFFENDERS.map((o) => o.count), 1);
 
   return (
     <div className="pdm-panel">

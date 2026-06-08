@@ -4,6 +4,7 @@ import {
   buildInitialSnapshot, tickSnapshot, deriveAlarms,
 } from "../../data/liveMonitorData";
 import { loadSettings } from "../../data/settingsData";
+import { useDataContext } from "../context/DataContext";
 
 import LiveHeader from "./live/LiveHeader";
 import LiveKpiSection from "./live/LiveKpiSection";
@@ -12,14 +13,14 @@ import ActiveAlarmsPanel from "./live/ActiveAlarmsPanel";
 import FleetHeatmap from "./live/FleetHeatmap";
 import LiveDetailModal from "./live/LiveDetailModal";
 
-// Tick interval in ms (default 5 seconds; can be tied to Settings refresh)
 const TICK_MS = 5000;
 
 export default function LiveMonitor() {
-  // Initial snapshot uses thresholds from saved settings (or defaults)
+  const { machines } = useDataContext();
   const settings = useRef(loadSettings());
+
   const [snapshot, setSnapshot] = useState<LiveSnapshot[]>(() =>
-    buildInitialSnapshot(settings.current.thresholds.sensor),
+    buildInitialSnapshot(machines, settings.current.thresholds.sensor),
   );
   const [alarms, setAlarms] = useState<ActiveAlarm[]>(() =>
     deriveAlarms(snapshot, []),
@@ -30,8 +31,16 @@ export default function LiveMonitor() {
   const [selected, setSelected] = useState<LiveSnapshot | null>(null);
   const [highlightedMachine, setHighlightedMachine] = useState<string | null>(null);
 
-  // Acknowledged alarm IDs (kept locally to suppress re-trigger sound)
   const ackIds = useRef<Set<string>>(new Set());
+
+  // Re-seed when uploaded dataset changes
+  useEffect(() => {
+    const fresh = buildInitialSnapshot(machines, settings.current.thresholds.sensor);
+    setSnapshot(fresh);
+    setAlarms(deriveAlarms(fresh, []));
+    setSelected(null);
+    ackIds.current.clear();
+  }, [machines]);
 
   const tick = () => {
     setSnapshot((prev) => {
@@ -51,7 +60,6 @@ export default function LiveMonitor() {
     return () => clearInterval(id);
   }, [paused]);
 
-  // Keep selected machine fresh as snapshot updates
   useEffect(() => {
     if (!selected) return;
     const fresh = snapshot.find((m) => m.machineID === selected.machineID);
@@ -68,7 +76,6 @@ export default function LiveMonitor() {
     setHighlightedMachine(machineID);
     const m = snapshot.find((x) => x.machineID === machineID);
     if (m) setSelected(m);
-    // Clear highlight after a moment
     setTimeout(() => setHighlightedMachine(null), 2500);
   };
 
@@ -112,7 +119,6 @@ export default function LiveMonitor() {
               : undefined
           }
           onScheduleMaintenance={() => {
-            // Hook for future cross-page navigation
             alert(`Schedule maintenance for ${selected.machineID} — go to Maintenance page`);
           }}
         />

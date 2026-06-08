@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
-import {
-  WEEKLY_TREND, COMPONENT_COLOR, type FailureComponent,
-} from "../../../data/failureData";
+import { COMPONENT_COLOR, type FailureComponent } from "../../../data/failureData";
+import { useDataContext } from "../../context/DataContext";
 
 const COMPS: FailureComponent[] = ["Comp1", "Comp2", "Comp3", "Comp4"];
 
@@ -10,7 +9,7 @@ export default function FailureTrendPanel() {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
-  const data = WEEKLY_TREND;
+  const data = useDataContext().weeklyTrend;
 
   // Compute stacked sums (skipping hidden series for max calculation)
   const stacks = data.map((d) => {

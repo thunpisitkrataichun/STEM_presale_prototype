@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HEATMAP, HEATMAP_MAX } from "../../../data/failureData";
+import { useDataContext } from "../../context/DataContext";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -13,6 +13,7 @@ function interp(t: number): string {
 }
 
 export default function FailureHeatmapPanel() {
+  const { heatmap: HEATMAP, heatmapMax: HEATMAP_MAX } = useDataContext();
   const [hover, setHover] = useState<{ d: number; h: number } | null>(null);
 
   return (

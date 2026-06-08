@@ -86,8 +86,11 @@ function buildSensor(base: number, sigma: number, thr: { min: number; max: numbe
   };
 }
 
-export function buildInitialSnapshot(thresholds = DEFAULT_THRESHOLDS): LiveSnapshot[] {
-  return MACHINES.map((m, idx) => {
+export function buildInitialSnapshot(
+  machines: MachinePrediction[] = MACHINES,
+  thresholds = DEFAULT_THRESHOLDS,
+): LiveSnapshot[] {
+  return machines.map((m, idx) => {
     // ~78% running, ~18% idle, ~4% alarm initially
     const r = (idx * 7 + 13) % 100;
     let status: LiveStatus = "running";

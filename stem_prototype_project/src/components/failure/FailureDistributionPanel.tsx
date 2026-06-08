@@ -1,7 +1,6 @@
 import { useState } from "react";
-import {
-  FAILURE_BY_COMPONENT, COMPONENT_COLOR, type FailureComponent,
-} from "../../../data/failureData";
+import { COMPONENT_COLOR, type FailureComponent } from "../../../data/failureData";
+import { useDataContext } from "../../context/DataContext";
 
 interface Props {
   onSelectComponent: (c: FailureComponent | null) => void;
@@ -12,8 +11,9 @@ const COMPS: FailureComponent[] = ["Comp1", "Comp2", "Comp3", "Comp4"];
 
 export default function FailureDistributionPanel({ onSelectComponent, selected }: Props) {
   const [hover, setHover] = useState<FailureComponent | null>(null);
-  const total = COMPS.reduce((s, c) => s + FAILURE_BY_COMPONENT[c], 0);
-  const maxCount = Math.max(...COMPS.map((c) => FAILURE_BY_COMPONENT[c]));
+  const failureByComponent = useDataContext().failureByComponent;
+  const total = COMPS.reduce((s, c) => s + failureByComponent[c], 0);
+  const maxCount = Math.max(...COMPS.map((c) => failureByComponent[c]));
 
   return (
     <div className="pdm-panel">
@@ -26,7 +26,7 @@ export default function FailureDistributionPanel({ onSelectComponent, selected }
 
       <div className="pdm-bar-list">
         {COMPS.map((c) => {
-          const n = FAILURE_BY_COMPONENT[c];
+          const n = failureByComponent[c];
           const pct = total === 0 ? 0 : (n / total) * 100;
           const widthPct = maxCount === 0 ? 0 : (n / maxCount) * 100;
           const isActive = selected === c || hover === c;
