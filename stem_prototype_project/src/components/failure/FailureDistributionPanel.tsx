@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { COMPONENT_COLOR, type FailureComponent } from "../../../data/failureData";
+import { COMPONENT_LABEL } from "../../lib/componentLabels";
 import { useDataContext } from "../../context/DataContext";
 
 interface Props {
@@ -38,7 +39,7 @@ export default function FailureDistributionPanel({ onSelectComponent, selected }
               onMouseEnter={() => setHover(c)}
               onMouseLeave={() => setHover(null)}
             >
-              <div className="pdm-bar-label">{c}</div>
+              <div className="pdm-bar-label">{COMPONENT_LABEL[c]}</div>
               <div className="pdm-bar-track">
                 <div
                   className="pdm-bar-fill"

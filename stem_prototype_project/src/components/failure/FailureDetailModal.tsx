@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import {
   type FailureEvent, SENSOR_SNAPSHOTS, COMPONENT_COLOR,
 } from "../../../data/failureData";
+import { COMPONENT_LABEL } from "../../lib/componentLabels";
 
 interface Props {
   event: FailureEvent;
@@ -146,7 +147,7 @@ export default function FailureDetailModal({ event, onClose }: Props) {
           <div>
             <div className="pdm-modal-title">
               <span className="pdm-led" style={{ background: COMPONENT_COLOR[event.component] }} />
-              {event.id} · {event.machineID} · {event.component}
+              {event.id} · {event.machineID} · {COMPONENT_LABEL[event.component]}
             </div>
             <div className="pdm-modal-sub">
               Failure Event · {formattedDt} · Triggered by <strong>{event.triggeredBy}</strong>
@@ -187,7 +188,7 @@ export default function FailureDetailModal({ event, onClose }: Props) {
           borderRadius: 6, fontSize: 12, color: "var(--ink-soft)",
         }}>
           <strong style={{ color: "var(--ink)" }}>Action taken:</strong>{" "}
-          {event.component} replaced · recovery time {event.recoveryHours}h
+          {COMPONENT_LABEL[event.component]} replaced · recovery time {event.recoveryHours}h
         </div>
 
         <div className="pdm-modal-footer" style={{ marginTop: 16 }}>

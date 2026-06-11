@@ -1,4 +1,5 @@
 import { useDataContext } from "../../context/DataContext";
+import { COMPONENT_LABEL } from "../../lib/componentLabels";
 
 function Delta({ now, prev, lowerBetter }: { now: number; prev: number; lowerBetter?: boolean }) {
   const diff = now - prev;
@@ -36,7 +37,7 @@ export default function FailureKpiSection() {
 
       <div className="pdm-kpi">
         <p className="pdm-kpi-lbl">Top Failed Component</p>
-        <div><span className="pdm-kpi-val">{k.topComponent}</span></div>
+        <div><span className="pdm-kpi-val">{COMPONENT_LABEL[k.topComponent]}</span></div>
         <div className="pdm-kpi-foot">
           {k.topComponentPct}% of all failures
         </div>

@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { COMPONENT_COLOR, type FailureEvent, type FailureComponent } from "../../../data/failureData";
+import { COMPONENT_LABEL } from "../../lib/componentLabels";
 import { useDataContext } from "../../context/DataContext";
 import Pagination from "../overview/Pagination";
 
@@ -86,7 +87,7 @@ export default function FailureEventsTable({
             type="button"
             className={"pdm-chip" + (localCompFilter === c ? " active" : "")}
             onClick={() => { setLocalCompFilter(c); setPage(1); }}
-          >{c}</button>
+          >{COMPONENT_LABEL[c]}</button>
         ))}
         {hasExternalFilter && (
           <button
@@ -124,7 +125,7 @@ export default function FailureEventsTable({
               <td>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
                   <span className="pdm-cal-dot" style={{ background: COMPONENT_COLOR[e.component] }} />
-                  {e.component}
+                  {COMPONENT_LABEL[e.component]}
                 </span>
               </td>
               <td>{e.triggeredBy}</td>

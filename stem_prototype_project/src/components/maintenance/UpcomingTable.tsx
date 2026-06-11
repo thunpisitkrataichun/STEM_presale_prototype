@@ -3,6 +3,7 @@ import {
   type MaintenanceJob, type MaintenanceType,
   TYPE_COLOR, STATUS_COLOR_MAINT, todayISO, isOverdue, formatTime, formatDateLong,
 } from "../../../data/maintenanceData";
+import { exportMaintenanceXlsx } from "../../utils/exportMaintenance";
 
 type FilterKey = "all" | "week" | "overdue" | MaintenanceType;
 
@@ -54,13 +55,23 @@ export default function UpcomingTable({ jobs, onSelectJob }: Props) {
     <div className="pdm-table-wrap">
       <div className="pdm-phead">
         <span className="pdm-pt">Upcoming Maintenance</span>
-        <div className="pdm-chip-row">
-          <Chip k="all" label="All" />
-          <Chip k="week" label="This Week" />
-          <Chip k="overdue" label="Overdue" />
-          <Chip k="Preventive" label="Preventive" />
-          <Chip k="Corrective" label="Corrective" />
-          <Chip k="Inspection" label="Inspection" />
+        <div className="pdm-phead-actions">
+          <div className="pdm-chip-row">
+            <Chip k="all" label="All" />
+            <Chip k="week" label="This Week" />
+            <Chip k="overdue" label="Overdue" />
+            <Chip k="Preventive" label="Preventive" />
+            <Chip k="Corrective" label="Corrective" />
+            <Chip k="Inspection" label="Inspection" />
+          </div>
+          <button
+            type="button"
+            className="pdm-export-btn"
+            onClick={() => exportMaintenanceXlsx(jobs)}
+            title="Export all maintenance jobs as a styled Excel report"
+          >
+            ⬇ Export Excel
+          </button>
         </div>
       </div>
 

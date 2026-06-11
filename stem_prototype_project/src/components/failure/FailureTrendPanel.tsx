@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { COMPONENT_COLOR, type FailureComponent } from "../../../data/failureData";
+import { COMPONENT_LABEL } from "../../lib/componentLabels";
 import { useDataContext } from "../../context/DataContext";
 
 const COMPS: FailureComponent[] = ["Comp1", "Comp2", "Comp3", "Comp4"];
@@ -162,7 +163,7 @@ export default function FailureTrendPanel() {
               width: 10, height: 10, borderRadius: 2,
               background: COMPONENT_COLOR[c],
             }} />
-            {c}
+            {COMPONENT_LABEL[c]}
           </button>
         ))}
       </div>

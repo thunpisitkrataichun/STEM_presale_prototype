@@ -4,6 +4,10 @@ import {
   type MachinePrediction,
   type RiskStatus,
 } from "../../data/modelData";
+import {
+  WHITE_ARGB, HEADER_ARGB, BAND_ARGB, THIN_BORDER,
+  solidFill, addReportTitle, addSummaryBand, addHeaderRow, downloadWorkbook,
+} from "./excelReportStyles";
 
 // Matches STATUS_COLOR in modelData.ts (ARGB, no leading #)
 const STATUS_ARGB: Record<RiskStatus, string> = {
@@ -12,22 +16,6 @@ const STATUS_ARGB: Record<RiskStatus, string> = {
   Watch: "FF5FA8E8",
   Normal: "FF2FAB6F",
 };
-
-const HEADER_ARGB = "FF1E4D8C"; // --blue-800
-const TITLE_ARGB = "FF14365F"; // --blue-900
-const BAND_ARGB = "FFF4F9FE"; // --blue-25
-const WHITE_ARGB = "FFFFFFFF";
-
-const THIN_BORDER: Partial<ExcelJS.Borders> = {
-  top: { style: "thin", color: { argb: "FFD6E4F5" } },
-  left: { style: "thin", color: { argb: "FFD6E4F5" } },
-  bottom: { style: "thin", color: { argb: "FFD6E4F5" } },
-  right: { style: "thin", color: { argb: "FFD6E4F5" } },
-};
-
-function solidFill(argb: string): ExcelJS.Fill {
-  return { type: "pattern", pattern: "solid", fgColor: { argb } };
-}
 
 export async function exportPredictionsXlsx(machines: MachinePrediction[]) {
   const wb = new ExcelJS.Workbook();
@@ -51,66 +39,31 @@ export async function exportPredictionsXlsx(machines: MachinePrediction[]) {
     { key: "status", width: 12 },
   ];
 
-  // ── Title ──────────────────────────────────────────────
-  ws.mergeCells("A1:J1");
-  const title = ws.getCell("A1");
-  title.value = "Machine RUL Prediction Report";
-  title.font = { name: "Calibri", size: 16, bold: true, color: { argb: WHITE_ARGB } };
-  title.fill = solidFill(TITLE_ARGB);
-  title.alignment = { vertical: "middle", horizontal: "center" };
-  ws.getRow(1).height = 32;
-
-  ws.mergeCells("A2:J2");
-  const subtitle = ws.getCell("A2");
   const now = new Date();
-  subtitle.value = `Generated ${now.toLocaleString()}  ·  ${machines.length} machines  ·  Model: XGBoost (days-to-failure)`;
-  subtitle.font = { name: "Calibri", size: 10, italic: true, color: { argb: "FF6F8BAB" } };
-  subtitle.alignment = { vertical: "middle", horizontal: "center" };
-  ws.getRow(2).height = 18;
+  addReportTitle(
+    ws, "J",
+    "Machine RUL Prediction Report",
+    `Generated ${now.toLocaleString()}  ·  ${machines.length} machines  ·  Model: XGBoost (days-to-failure)`,
+  );
 
   // ── Status summary band (row 4) ────────────────────────
   const counts: Record<RiskStatus, number> = { Critical: 0, Warning: 0, Watch: 0, Normal: 0 };
   for (const m of machines) counts[statusFromDays(m.daysToFailure)]++;
 
-  ws.mergeCells("A4:B4");
-  const totalCell = ws.getCell("A4");
-  totalCell.value = `Total: ${machines.length}`;
-  totalCell.font = { bold: true, color: { argb: WHITE_ARGB }, size: 11 };
-  totalCell.fill = solidFill(HEADER_ARGB);
-  totalCell.alignment = { vertical: "middle", horizontal: "center" };
-
-  const summarySpans: Array<[RiskStatus, string, string]> = [
-    ["Critical", "C4", "D4"],
-    ["Warning", "E4", "F4"],
-    ["Watch", "G4", "H4"],
-    ["Normal", "I4", "J4"],
-  ];
-  for (const [st, from, to] of summarySpans) {
-    ws.mergeCells(`${from}:${to}`);
-    const c = ws.getCell(from);
-    c.value = `${st}: ${counts[st]}`;
-    c.font = { bold: true, color: { argb: WHITE_ARGB }, size: 11 };
-    c.fill = solidFill(STATUS_ARGB[st]);
-    c.alignment = { vertical: "middle", horizontal: "center" };
-  }
-  ws.getRow(4).height = 22;
+  addSummaryBand(ws, 4, [
+    { range: "A4:B4", label: `Total: ${machines.length}`, argb: HEADER_ARGB },
+    { range: "C4:D4", label: `Critical: ${counts.Critical}`, argb: STATUS_ARGB.Critical },
+    { range: "E4:F4", label: `Warning: ${counts.Warning}`, argb: STATUS_ARGB.Warning },
+    { range: "G4:H4", label: `Watch: ${counts.Watch}`, argb: STATUS_ARGB.Watch },
+    { range: "I4:J4", label: `Normal: ${counts.Normal}`, argb: STATUS_ARGB.Normal },
+  ]);
 
   // ── Header row (row 6) ─────────────────────────────────
-  const HEADERS = [
+  addHeaderRow(ws, 6, [
     "Machine ID", "Model", "Age", "Days To Failure",
     "Volt", "Rotate", "Pressure", "Vibration",
     "Maintenance", "Status",
-  ];
-  const headerRow = ws.getRow(6);
-  HEADERS.forEach((h, i) => {
-    const cell = headerRow.getCell(i + 1);
-    cell.value = h;
-    cell.font = { bold: true, color: { argb: WHITE_ARGB }, size: 11 };
-    cell.fill = solidFill(HEADER_ARGB);
-    cell.alignment = { vertical: "middle", horizontal: "center" };
-    cell.border = THIN_BORDER;
-  });
-  headerRow.height = 24;
+  ]);
   ws.autoFilter = { from: "A6", to: "J6" };
 
   // ── Data rows (most critical first) ────────────────────
@@ -149,16 +102,6 @@ export async function exportPredictionsXlsx(machines: MachinePrediction[]) {
     statusCell.font = { bold: true, color: { argb: WHITE_ARGB } };
   });
 
-  // ── Download ───────────────────────────────────────────
-  const buf = await wb.xlsx.writeBuffer();
-  const blob = new Blob([buf], {
-    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
   const stamp = now.toISOString().slice(0, 10);
-  a.href = url;
-  a.download = `RUL_Prediction_Report_${stamp}.xlsx`;
-  a.click();
-  URL.revokeObjectURL(url);
+  await downloadWorkbook(wb, `RUL_Prediction_Report_${stamp}.xlsx`);
 }
