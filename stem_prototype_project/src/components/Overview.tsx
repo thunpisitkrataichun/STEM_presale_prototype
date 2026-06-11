@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   M006_BASELINE, TEST_MACHINE_ID,
-  type MachinePrediction,
+  type MachinePrediction, type RiskStatus,
 } from "../../data/modelData";
 import { useDataContext } from "../context/DataContext";
 
@@ -15,11 +15,13 @@ export default function Overview() {
   const { machines: contextMachines, setMachines: setContextMachines, uploadInfo } = useDataContext();
   const [machines, setMachinesLocal] = useState<MachinePrediction[]>(contextMachines);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<RiskStatus | null>(null);
 
   // Sync local state when a new xlsx is loaded or data is reset
   useEffect(() => {
     setMachinesLocal(contextMachines);
     setSelectedId(null);
+    setStatusFilter(null);
   }, [contextMachines]);
 
   const updateMachine = (updated: MachinePrediction) => {
@@ -53,9 +55,15 @@ export default function Overview() {
       <ChartsRow
         machines={machines}
         onSelect={(m) => setSelectedId(m.machineID)}
+        statusFilter={statusFilter}
+        onSelectStatus={(s) =>
+          setStatusFilter((prev) => (prev === s ? null : s))
+        }
       />
       <PredictionsPanel
         machines={machines}
+        statusFilter={statusFilter}
+        onClearStatusFilter={() => setStatusFilter(null)}
         onSelect={(m) => setSelectedId(m.machineID)}
       />
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   statusFromDays, STATUS_COLOR, TEST_MACHINE_ID,
   type MachinePrediction, type RiskStatus,
@@ -21,14 +21,21 @@ const PAGE_SIZE = 20;
 
 interface Props {
   machines: MachinePrediction[];
+  statusFilter: RiskStatus | null;
+  onClearStatusFilter: () => void;
   onSelect: (m: MachinePrediction) => void;
 }
 
-export default function PredictionsTable({ machines, onSelect }: Props) {
+export default function PredictionsTable({
+  machines, statusFilter, onClearStatusFilter, onSelect,
+}: Props) {
   const [sortKey, setSortKey] = useState<SortKey>("daysToFailure");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+
+  // Jump back to page 1 when the pie-chart status filter changes
+  useEffect(() => { setPage(1); }, [statusFilter]);
 
   const handleSort = (key: SortKey) => {
     if (key === sortKey) {
@@ -45,10 +52,14 @@ export default function PredictionsTable({ machines, onSelect }: Props) {
     setPage(1);
   };
 
+  const byStatus = statusFilter
+    ? machines.filter((m) => statusFromDays(m.daysToFailure) === statusFilter)
+    : machines;
+
   const query = search.trim().toLowerCase();
   const filtered = query
-    ? machines.filter((m) => m.machineID.toLowerCase().includes(query))
-    : machines;
+    ? byStatus.filter((m) => m.machineID.toLowerCase().includes(query))
+    : byStatus;
 
   const rows = [...filtered].sort((a, b) => {
     let cmp = 0;
@@ -108,6 +119,17 @@ export default function PredictionsTable({ machines, onSelect }: Props) {
       <div className="pdm-phead">
         <span className="pdm-pt">
           Machine RUL Predictions <ModelBadge inline />
+          {statusFilter && (
+            <button
+              type="button"
+              className="pdm-chip active"
+              style={{ marginLeft: 8, background: STATUS_COLOR[statusFilter] }}
+              onClick={onClearStatusFilter}
+              title="Clear status filter"
+            >
+              {statusFilter} only ×
+            </button>
+          )}
         </span>
         <div className="pdm-phead-actions">
           <input
@@ -168,7 +190,11 @@ export default function PredictionsTable({ machines, onSelect }: Props) {
       </table>
 
       {rows.length === 0 && (
-        <div className="pdm-empty">No machines match "{search}"</div>
+        <div className="pdm-empty">
+          {query
+            ? `No machines match "${search}"`
+            : "No machines match the current filters"}
+        </div>
       )}
 
       <div className="pdm-pagination">

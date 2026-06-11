@@ -1,31 +1,33 @@
 import { useMemo, useState } from "react";
-import { type MachinePrediction } from "../../../data/modelData";
+import {
+  statusFromDays, STATUS_COLOR,
+  type MachinePrediction, type RiskStatus,
+} from "../../../data/modelData";
 
-// Three-bucket fleet classification
-type Bucket = "Critical" | "Watch" | "Normal";
-
-const BUCKETS: { key: Bucket; label: string; desc: string; color: string }[] = [
-  { key: "Critical", label: "Critical", desc: "Action required",  color: "#d9534f" },
-  { key: "Watch",    label: "Watch",    desc: "Monitor closely",  color: "#e8a33d" },
-  { key: "Normal",   label: "Normal",   desc: "Healthy",          color: "#2fab6f" },
+// Four-status fleet classification — same buckets as the prediction table
+const BUCKETS: { key: RiskStatus; label: string; desc: string; color: string }[] = [
+  { key: "Critical", label: "Critical", desc: "Action required",      color: STATUS_COLOR.Critical },
+  { key: "Warning",  label: "Warning",  desc: "Schedule maintenance", color: STATUS_COLOR.Warning },
+  { key: "Watch",    label: "Watch",    desc: "Monitor closely",      color: STATUS_COLOR.Watch },
+  { key: "Normal",   label: "Normal",   desc: "Healthy",              color: STATUS_COLOR.Normal },
 ];
 
-function classify(dtf: number): Bucket {
-  if (dtf < 7) return "Critical";
-  if (dtf < 30) return "Watch";
-  return "Normal";
+interface Props {
+  machines: MachinePrediction[];
+  selected: RiskStatus | null;
+  onSelect: (s: RiskStatus) => void;
 }
 
-export default function FleetStatusPie({ machines }: { machines: MachinePrediction[] }) {
-  const [hovered, setHovered] = useState<Bucket | null>(null);
+export default function FleetStatusPie({ machines, selected, onSelect }: Props) {
+  const [hovered, setHovered] = useState<RiskStatus | null>(null);
 
   const counts = useMemo(() => {
-    const c: Record<Bucket, number> = { Critical: 0, Watch: 0, Normal: 0 };
-    for (const m of machines) c[classify(m.daysToFailure)]++;
+    const c: Record<RiskStatus, number> = { Critical: 0, Warning: 0, Watch: 0, Normal: 0 };
+    for (const m of machines) c[statusFromDays(m.daysToFailure)]++;
     return c;
   }, [machines]);
 
-  const total = counts.Critical + counts.Watch + counts.Normal;
+  const total = counts.Critical + counts.Warning + counts.Watch + counts.Normal;
 
   // Geometry — donut centered in (cx, cy) with radius r
   const W = 220, H = 220;
@@ -74,7 +76,9 @@ export default function FleetStatusPie({ machines }: { machines: MachinePredicti
           {/* Slices */}
           {slices.map((s) => {
             const isHover = hovered === s.key;
-            const radius = isHover ? r + 6 : r;
+            const isSelected = selected === s.key;
+            const radius = isHover || isSelected ? r + 6 : r;
+            const dimmed = selected !== null && !isSelected;
             return (
               <path
                 key={s.key}
@@ -82,9 +86,11 @@ export default function FleetStatusPie({ machines }: { machines: MachinePredicti
                 fill={s.color}
                 stroke="#fff"
                 strokeWidth={2}
-                style={{ cursor: "pointer", transition: "d 0.15s" }}
+                opacity={dimmed ? 0.3 : 1}
+                style={{ cursor: "pointer", transition: "d 0.15s, opacity 0.15s" }}
                 onMouseEnter={() => setHovered(s.key)}
                 onMouseLeave={() => setHovered(null)}
+                onClick={() => onSelect(s.key)}
               />
             );
           })}
@@ -97,7 +103,7 @@ export default function FleetStatusPie({ machines }: { machines: MachinePredicti
             fontWeight={700}
             fill="#14365f"
           >
-            {hovered ? counts[hovered] : total}
+            {hovered ? counts[hovered] : selected ? counts[selected] : total}
           </text>
           <text
             x={cx} y={cy + 14}
@@ -107,7 +113,11 @@ export default function FleetStatusPie({ machines }: { machines: MachinePredicti
             fontWeight={600}
             letterSpacing="0.04em"
           >
-            {hovered ? hovered.toUpperCase() : "MACHINES"}
+            {hovered
+              ? hovered.toUpperCase()
+              : selected
+              ? selected.toUpperCase()
+              : "MACHINES"}
           </text>
         </svg>
       </div>
@@ -117,12 +127,18 @@ export default function FleetStatusPie({ machines }: { machines: MachinePredicti
         {slices.map((s) => {
           const pct = total === 0 ? 0 : Math.round((s.count / total) * 100);
           const isHover = hovered === s.key;
+          const isSelected = selected === s.key;
           return (
             <div
               key={s.key}
-              className={"pdm-pie-row" + (isHover ? " hover" : "")}
+              className={
+                "pdm-pie-row" + (isHover ? " hover" : "") + (isSelected ? " selected" : "")
+              }
+              role="button"
+              aria-pressed={isSelected}
               onMouseEnter={() => setHovered(s.key)}
               onMouseLeave={() => setHovered(null)}
+              onClick={() => onSelect(s.key)}
             >
               <span className="pdm-pie-swatch" style={{ background: s.color }} />
               <div className="pdm-pie-info">
