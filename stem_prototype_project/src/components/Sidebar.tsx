@@ -23,7 +23,7 @@ const NAV: NavItem[] = [
   { key: "settings",    label: "Settings",         icon: <IconSettings /> },
 ];
 
-// STEM logo recreation (fallback ถ้าไม่มีไฟล์ ./logo.png)
+// STEM logo recreation (fallback when ./logo.png is missing)
 function StemLogoFallback() {
   // viewBox is wider than 124 so the italic "STEM" text fits without clipping.
   return (
@@ -51,7 +51,7 @@ export default function Sidebar({ active, onNavigate }: SidebarProps) {
     <aside className="pdm-side">
       <div className="pdm-logobox">
         {logoOk ? (
-          // วาง logo จริงไว้ที่ public/logo.png — ถ้าไม่เจอจะ fallback เป็น SVG
+          // Put the real logo at public/logo.png — falls back to SVG if missing
           <img
             src="./logo.png"
             alt="STEM"

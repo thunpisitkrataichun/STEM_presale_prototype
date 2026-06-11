@@ -185,7 +185,7 @@ body {
   font-size: 13px; font-weight: 600; color: var(--ink);
   display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
 }
-.pdm-pie-thai {
+.pdm-pie-desc {
   font-size: 11px; color: var(--ink-muted); font-weight: 500;
 }
 .pdm-pie-sub {
@@ -573,6 +573,25 @@ body {
   background: var(--risk-critical); color: #fff;
   border-radius: 8px; font-size: 9px; text-align: center;
 }
+
+/* ── Multi-select filter groups (Live Monitor) ───────── */
+.pdm-filter-groups {
+  display: flex; flex-wrap: wrap; gap: 6px 18px;
+  margin-bottom: 12px;
+}
+.pdm-filter-group {
+  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+}
+.pdm-filter-glabel {
+  font-size: 10px; font-weight: 700; color: var(--ink-faint);
+  text-transform: uppercase; letter-spacing: 0.04em;
+  margin-right: 2px;
+}
+.pdm-chip-clear {
+  background: #fdecea; color: var(--risk-critical);
+  border: 1px solid #f5c6c4;
+}
+.pdm-chip-clear:hover { background: #fadbd8; }
 
 /* ── Failure Analysis ──────────────────────────────────── */
 .pdm-bar-list { display: flex; flex-direction: column; gap: 14px; padding: 6px 0; }

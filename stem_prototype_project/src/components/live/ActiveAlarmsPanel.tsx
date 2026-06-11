@@ -22,14 +22,14 @@ export default function ActiveAlarmsPanel({
               color: "#fff", padding: "1px 7px", borderRadius: 8,
             }}>{alarms.length}</span>
           </span>
-          <div className="pdm-phead-sub">การแจ้งเตือนที่ต้องดำเนินการ</div>
+          <div className="pdm-phead-sub"></div>
         </div>
       </div>
 
       {alarms.length === 0 && (
         <div className="pdm-empty">
           ✓ All systems normal<br />
-          <span style={{ fontSize: 11 }}>ระบบทำงานปกติ</span>
+          <span style={{ fontSize: 11 }}></span>
         </div>
       )}
 

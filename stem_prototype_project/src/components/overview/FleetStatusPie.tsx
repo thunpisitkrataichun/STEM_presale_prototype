@@ -1,16 +1,13 @@
 import { useMemo, useState } from "react";
 import { type MachinePrediction } from "../../../data/modelData";
 
-// Three-bucket fleet classification:
-//   Critical (<7d, red)    → ต้องเเก้ไขด่วน
-//   Watch    (7..30d, yel) → ต้องจับตามอง
-//   Normal   (>=30d, grn)  → ปกติ
+// Three-bucket fleet classification
 type Bucket = "Critical" | "Watch" | "Normal";
 
-const BUCKETS: { key: Bucket; label: string; thai: string; color: string }[] = [
-  { key: "Critical", label: "Critical", thai: "ต้องเเก้ไขด่วน", color: "#d9534f" },
-  { key: "Watch",    label: "Watch",    thai: "ต้องจับตามอง",   color: "#e8a33d" },
-  { key: "Normal",   label: "Normal",   thai: "ปกติ",          color: "#2fab6f" },
+const BUCKETS: { key: Bucket; label: string; desc: string; color: string }[] = [
+  { key: "Critical", label: "Critical", desc: "Action required",  color: "#d9534f" },
+  { key: "Watch",    label: "Watch",    desc: "Monitor closely",  color: "#e8a33d" },
+  { key: "Normal",   label: "Normal",   desc: "Healthy",          color: "#2fab6f" },
 ];
 
 function classify(dtf: number): Bucket {
@@ -131,7 +128,7 @@ export default function FleetStatusPie({ machines }: { machines: MachinePredicti
               <div className="pdm-pie-info">
                 <div className="pdm-pie-label">
                   {s.label}
-                  <span className="pdm-pie-thai">· {s.thai}</span>
+                  <span className="pdm-pie-desc">· {s.desc}</span>
                 </div>
                 <div className="pdm-pie-sub">
                   <strong style={{ color: s.color }}>{s.count}</strong>

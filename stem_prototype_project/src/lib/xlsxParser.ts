@@ -197,8 +197,8 @@ function parseViaSheetJs(
   const missing = required.filter((f) => !(f in ci));
   if (missing.length > 0) {
     throw {
-      message: `ไม่พบ column ที่จำเป็น: ${missing.join(", ")}`,
-      detail: `Header ที่พบ: ${headers.filter(Boolean).join(", ")}`,
+      message: `Missing required columns: ${missing.join(", ")}`,
+      detail: `Headers found: ${headers.filter(Boolean).join(", ")}`,
     } as ParseError;
   }
 
@@ -267,8 +267,8 @@ export async function parseXlsx(file: File): Promise<ParseResult> {
     const machines = parseCsvText(text);
     if (!machines || machines.length === 0) {
       throw {
-        message: "ไม่สามารถ parse ไฟล์ CSV ได้ กรุณาตรวจสอบ header และข้อมูล",
-        detail: "ต้องมีอย่างน้อย column: machineID, volt, rotate, pressure, vibration",
+        message: "Could not parse the CSV file — please check the header and data",
+        detail: "At minimum these columns are required: machineID, volt, rotate, pressure, vibration",
       } as ParseError;
     }
     return { machines, filename: file.name, rowCount: machines.length };
@@ -278,14 +278,14 @@ export async function parseXlsx(file: File): Promise<ParseResult> {
   const buffer = await file.arrayBuffer();
   const wb = XLSX.read(buffer, { type: "array" });
   if (!wb.SheetNames[0]) {
-    throw { message: "ไฟล์ Excel ว่างเปล่า (ไม่มี sheet)" } as ParseError;
+    throw { message: "The Excel file is empty (no sheets)" } as ParseError;
   }
 
   const colIdx: Record<string, number> = {};
   const machines = parseViaSheetJs(wb, colIdx);
 
   if (machines.length === 0) {
-    throw { message: "ไม่พบข้อมูล (ทุก row ว่างเปล่า)" } as ParseError;
+    throw { message: "No data found (all rows are empty)" } as ParseError;
   }
 
   return { machines, filename: file.name, rowCount: machines.length };

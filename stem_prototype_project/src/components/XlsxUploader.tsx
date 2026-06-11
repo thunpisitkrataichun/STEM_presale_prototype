@@ -10,7 +10,7 @@ export default function XlsxUploader() {
   const handleFile = (file: File | undefined) => {
     if (!file) return;
     if (!file.name.match(/\.(xlsx|xls|csv)$/i)) {
-      alert("กรุณาเลือกไฟล์ .xlsx, .xls หรือ .csv เท่านั้น");
+      alert("Please select a .xlsx, .xls, or .csv file");
       return;
     }
     loadFromXlsx(file);
@@ -24,7 +24,7 @@ export default function XlsxUploader() {
 
   return (
     <div>
-      <h3 className="pdm-settings-h3">Upload ข้อมูล Excel</h3>
+      <h3 className="pdm-settings-h3">Upload Excel Data</h3>
 
       {/* Drop zone */}
       <div
@@ -44,19 +44,19 @@ export default function XlsxUploader() {
         {isUploading ? (
           <div className="pdm-xlsx-state">
             <div className="pdm-xlsx-spinner" />
-            <span>กำลังประมวลผล…</span>
+            <span>Processing…</span>
           </div>
         ) : (
           <div className="pdm-xlsx-state">
             <span className="pdm-xlsx-icon">📊</span>
             <span className="pdm-xlsx-hint">
-              วาง <strong>.xlsx</strong> หรือ <strong>.csv</strong> ที่นี่ หรือ{" "}
-              <span className="pdm-xlsx-link">คลิกเพื่อเลือกไฟล์</span>
+              Drop a <strong>.xlsx</strong> or <strong>.csv</strong> file here, or{" "}
+              <span className="pdm-xlsx-link">click to browse</span>
             </span>
             <span className="pdm-xlsx-sub">
-              columns ที่ต้องการ: machineID, model, age, volt, rotate, pressure, vibration
+              Required columns: machineID, model, age, volt, rotate, pressure, vibration
               <br />
-              (column underMaintenance ไม่บังคับ · daysToFailure คำนวณโดย XGBoost อัตโนมัติ)
+              (underMaintenance column is optional · daysToFailure is computed automatically by XGBoost)
             </span>
           </div>
         )}
@@ -65,7 +65,7 @@ export default function XlsxUploader() {
       {/* Error */}
       {uploadError && (
         <div className="pdm-xlsx-error">
-          <strong>Upload ไม่สำเร็จ:</strong> {uploadError.message}
+          <strong>Upload failed:</strong> {uploadError.message}
           {uploadError.detail && (
             <div style={{ marginTop: 4, fontSize: 11 }}>{uploadError.detail}</div>
           )}
@@ -79,23 +79,23 @@ export default function XlsxUploader() {
           <div style={{ flex: 1 }}>
             <strong>{uploadInfo.filename}</strong>
             <span style={{ marginLeft: 8, color: "var(--ink-muted)", fontSize: 12 }}>
-              {uploadInfo.rowCount} machines · โหลดเมื่อ {uploadInfo.loadedAt}
+              {uploadInfo.rowCount} machines · loaded {uploadInfo.loadedAt}
             </span>
           </div>
           <button
             type="button"
             className="pdm-xlsx-reset"
             onClick={resetToDefault}
-            title="กลับไปใช้ข้อมูล demo"
+            title="Reset to demo data"
           >
-            ✕ ล้างข้อมูล
+            ✕ Clear Data
           </button>
         </div>
       )}
 
       {/* Template download hint */}
       <p style={{ fontSize: 11, color: "var(--ink-muted)", marginTop: 8 }}>
-        ดาวน์โหลด{" "}
+        Download{" "}
         <span
           className="pdm-xlsx-link"
           style={{ cursor: "pointer" }}
@@ -103,7 +103,7 @@ export default function XlsxUploader() {
         >
           template.xlsx
         </span>{" "}
-        สำหรับรูปแบบไฟล์ที่ถูกต้อง
+        for the correct file format
       </p>
     </div>
   );

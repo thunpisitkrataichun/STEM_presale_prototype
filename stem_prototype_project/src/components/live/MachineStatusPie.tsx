@@ -88,7 +88,7 @@ export default function MachineStatusPie({ active, idle}: Props) {
 
       <div style={{ flex: 1, minWidth: 0 }}>
         <p className="pdm-kpi-lbl" style={{ minHeight: 0, marginBottom: 8 }}>Machine Status</p>
-        <div style={{ fontSize: 11, color: "var(--ink-muted)", marginBottom: 6 }}>สถานะเครื่อง</div>
+        <div style={{ fontSize: 11, color: "var(--ink-muted)", marginBottom: 6 }}>Fleet operating state</div>
 
         <div
           className={"pdm-pie-row" + (hover === "active" ? " hover" : "")}
@@ -97,7 +97,7 @@ export default function MachineStatusPie({ active, idle}: Props) {
         >
           <span className="pdm-pie-swatch" style={{ background: COLORS.active }} />
           <div className="pdm-pie-info">
-            <div className="pdm-pie-label">Active <span className="pdm-pie-thai">· ทำงานอยู่</span></div>
+            <div className="pdm-pie-label">Active <span className="pdm-pie-desc">· In operation</span></div>
             <div className="pdm-pie-sub">
               <strong style={{ color: COLORS.active }}>{active}</strong>
               <span> · {total ? Math.round((active / total) * 100) : 0}%</span>
@@ -111,7 +111,7 @@ export default function MachineStatusPie({ active, idle}: Props) {
         >
           <span className="pdm-pie-swatch" style={{ background: COLORS.idle }} />
           <div className="pdm-pie-info">
-            <div className="pdm-pie-label">Idle <span className="pdm-pie-thai">· หยุดทำงาน</span></div>
+            <div className="pdm-pie-label">Idle <span className="pdm-pie-desc">· Stopped</span></div>
             <div className="pdm-pie-sub">
               <strong style={{ color: COLORS.idle }}>{idle}</strong>
               <span> · {total ? Math.round((idle / total) * 100) : 0}%</span>

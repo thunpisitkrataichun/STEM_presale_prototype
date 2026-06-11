@@ -118,11 +118,11 @@ export default function DataManagement() {
 
   function handleSave() {
     const id = form.machineID.trim();
-    if (!id) { setFormError("กรุณาใส่ Machine ID"); return; }
+    if (!id) { setFormError("Please enter a Machine ID"); return; }
 
     if (modalMode === "add") {
       if (machines.some((m) => m.machineID === id)) {
-        setFormError(`Machine ID "${id}" มีอยู่ในระบบแล้ว`);
+        setFormError(`Machine ID "${id}" already exists`);
         return;
       }
       addMachine({ ...form, machineID: id, daysToFailure: computeDays(form) });
@@ -148,11 +148,11 @@ export default function DataManagement() {
         <div>
           <h1 className="pdm-title">Data Management</h1>
           <p className="pdm-sub">
-            จัดการข้อมูลเครื่องจักร — {machines.length} เครื่อง
+            Manage machine records — {machines.length} machines
           </p>
         </div>
         <button className="pdm-crud-add-btn" onClick={openAdd}>
-          + เพิ่มเครื่องจักร
+          + Add Machine
         </button>
       </div>
 
@@ -160,11 +160,11 @@ export default function DataManagement() {
       <div className="pdm-crud-toolbar">
         <input
           className="pdm-crud-search"
-          placeholder="ค้นหา Machine ID หรือ Model…"
+          placeholder="Search Machine ID or Model…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <span className="pdm-crud-count">{filtered.length} รายการ</span>
+        <span className="pdm-crud-count">{filtered.length} records</span>
       </div>
 
       {/* Table */}
@@ -236,7 +236,7 @@ export default function DataManagement() {
             {filtered.length === 0 && (
               <tr>
                 <td colSpan={10} className="pdm-crud-empty">
-                  ไม่พบข้อมูล
+                  No records found
                 </td>
               </tr>
             )}
@@ -254,7 +254,7 @@ export default function DataManagement() {
             <div className="pdm-modal-head">
               <div>
                 <div className="pdm-modal-title">
-                  {modalMode === "add" ? "เพิ่มเครื่องจักรใหม่" : `แก้ไข ${editId}`}
+                  {modalMode === "add" ? "Add New Machine" : `Edit ${editId}`}
                 </div>
               </div>
               <button className="pdm-modal-btn pdm-modal-close" onClick={closeModal}>
@@ -276,7 +276,7 @@ export default function DataManagement() {
                   value={form.machineID}
                   onChange={(e) => setField("machineID", e.target.value)}
                   disabled={modalMode === "edit"}
-                  placeholder="เช่น M101"
+                  placeholder="e.g. M101"
                 />
               </div>
 
@@ -371,7 +371,7 @@ export default function DataManagement() {
               <div>
                 <div className="pdm-modal-prediction-label">Predicted Days to Failure</div>
                 <div style={{ fontSize: 11, color: "var(--ink-muted)", marginTop: 2 }}>
-                  คำนวณโดย XGBoost model
+                  Computed by XGBoost model
                 </div>
               </div>
               <div
@@ -385,10 +385,10 @@ export default function DataManagement() {
 
             <div className="pdm-modal-footer" style={{ marginTop: 16 }}>
               <button className="pdm-modal-btn pdm-modal-close" onClick={closeModal}>
-                ยกเลิก
+                Cancel
               </button>
               <button className="pdm-modal-btn pdm-modal-confirm" onClick={handleSave}>
-                {modalMode === "add" ? "เพิ่ม" : "บันทึก"}
+                {modalMode === "add" ? "Add" : "Save"}
               </button>
             </div>
           </div>
@@ -404,7 +404,7 @@ export default function DataManagement() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="pdm-modal-head">
-              <div className="pdm-modal-title">ยืนยันการลบ</div>
+              <div className="pdm-modal-title">Confirm Deletion</div>
               <button
                 className="pdm-modal-btn pdm-modal-close"
                 onClick={() => setDeleteTarget(null)}
@@ -413,10 +413,10 @@ export default function DataManagement() {
               </button>
             </div>
             <p style={{ padding: "4px 0 20px", margin: 0, fontSize: 14, color: "var(--ink)" }}>
-              ต้องการลบ <strong>{deleteTarget}</strong> ออกจากระบบหรือไม่?
+              Delete <strong>{deleteTarget}</strong> from the system?
               <br />
               <span style={{ fontSize: 12, color: "var(--ink-muted)" }}>
-                การลบนี้ไม่สามารถเรียกคืนได้
+                This action cannot be undone
               </span>
             </p>
             <div className="pdm-modal-footer">
@@ -424,13 +424,13 @@ export default function DataManagement() {
                 className="pdm-modal-btn pdm-modal-close"
                 onClick={() => setDeleteTarget(null)}
               >
-                ยกเลิก
+                Cancel
               </button>
               <button
                 className="pdm-modal-btn pdm-crud-btn-del-confirm"
                 onClick={() => { deleteMachine(deleteTarget); setDeleteTarget(null); }}
               >
-                ลบ
+                Delete
               </button>
             </div>
           </div>

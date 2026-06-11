@@ -27,14 +27,14 @@ export default function LiveKpiSection({ snapshot, alarms }: Props) {
         borderWidth: alarmCount > 0 ? 1.5 : undefined,
       }}>
         <p className="pdm-kpi-lbl">Active Alarms</p>
-        <div style={{ fontSize: 11, color: "var(--ink-muted)", marginBottom: 6 }}>การแจ้งเตือน</div>
+        <div style={{ fontSize: 11, color: "var(--ink-muted)", marginBottom: 6 }}>Notifications</div>
         <div>
           <span className="pdm-kpi-val" style={{ color: alarmCount > 0 ? "var(--risk-critical)" : undefined }}>
             {alarmCount}
           </span>
         </div>
         <div className="pdm-kpi-foot">
-          {alarmCount > 0 ? "need action · ต้องการการดำเนินการ" : "all systems normal"}
+          {alarmCount > 0 ? "need action" : "all systems normal"}
         </div>
         {alarmCount > 0 && (
           <div style={{
@@ -47,7 +47,7 @@ export default function LiveKpiSection({ snapshot, alarms }: Props) {
 
       <div className="pdm-kpi">
         <p className="pdm-kpi-lbl">Fleet Workload</p>
-        <div style={{ fontSize: 11, color: "var(--ink-muted)", marginBottom: 6 }}>ภาระงานของเครื่อง</div>
+        <div style={{ fontSize: 11, color: "var(--ink-muted)", marginBottom: 6 }}></div>
         <div>
           <span className="pdm-kpi-val">{avgUtil.toFixed(1)}</span>
           <span className="pdm-kpi-unit">%</span>
@@ -63,7 +63,7 @@ export default function LiveKpiSection({ snapshot, alarms }: Props) {
           }} />
         </div>
         <div className="pdm-kpi-foot" style={{ marginTop: 6 }}>
-          เครื่องทำงานเฉลี่ย · across {active} active machines
+          across {active} active machines
         </div>
       </div>
 

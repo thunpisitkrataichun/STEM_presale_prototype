@@ -207,7 +207,7 @@ export default function MachineDetailModal({
                 onClick={handleConfirm}
                 aria-label="Confirm and re-run model"
               >
-                ยืนยัน
+                Confirm
               </button>
             </>
           )}

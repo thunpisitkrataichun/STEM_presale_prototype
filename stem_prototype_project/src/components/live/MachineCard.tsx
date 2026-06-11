@@ -58,7 +58,7 @@ export default function MachineCard({ snap, onClick, highlighted }: Props) {
       {isIdle ? (
         <div className="pdm-live-card-idle">
           Stopped<br />
-          <span style={{ fontSize: 11, color: "var(--ink-muted)" }}>หยุดทำงาน</span>
+          <span style={{ fontSize: 11, color: "var(--ink-muted)" }}>Not in operation</span>
         </div>
       ) : (
         <>

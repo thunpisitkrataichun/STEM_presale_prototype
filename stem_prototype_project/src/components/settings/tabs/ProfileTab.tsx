@@ -76,7 +76,7 @@ export default function ProfileTab({ value, onChange }: Props) {
                   checked={value.language === lang}
                   onChange={() => update("language", lang)}
                 />
-                {lang === "en" ? "English" : "ไทย"}
+                {lang === "en" ? "English" : "Thai"}
               </label>
             ))}
           </div>
