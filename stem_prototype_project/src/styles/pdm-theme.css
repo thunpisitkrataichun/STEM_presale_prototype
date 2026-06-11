@@ -277,6 +277,19 @@ body {
 }
 .pdm-search::placeholder { color: var(--ink-faint); }
 
+/* ── Export button ──────────────────────── */
+.pdm-phead-actions { display: flex; align-items: center; gap: 8px; }
+.pdm-export-btn {
+  height: 30px; padding: 0 12px;
+  font-size: 12px; font-weight: 600; font-family: inherit;
+  color: #fff; background: var(--blue-700);
+  border: 1px solid var(--blue-800); border-radius: 8px;
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.12s, box-shadow 0.12s;
+}
+.pdm-export-btn:hover { background: var(--blue-600); box-shadow: 0 0 0 3px var(--blue-50); }
+.pdm-export-btn:active { background: var(--blue-800); }
+
 /* ── Clickable rows ─────────────────────── */
 .pdm-table tbody tr.clickable { cursor: pointer; transition: background 0.1s; }
 .pdm-table tbody tr.clickable:hover { background: var(--blue-25); }

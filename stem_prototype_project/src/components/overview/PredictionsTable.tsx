@@ -5,6 +5,7 @@ import {
 } from "../../../data/modelData";
 import ModelBadge from "./ModelBadge";
 import Pagination from "./Pagination";
+import { exportPredictionsXlsx } from "../../utils/exportPredictions";
 
 type SortKey = "machineID" | "model" | "age" | "daysToFailure" | "status" | "maint";
 type SortDir = "asc" | "desc";
@@ -108,14 +109,24 @@ export default function PredictionsTable({ machines, onSelect }: Props) {
         <span className="pdm-pt">
           Machine RUL Predictions <ModelBadge inline />
         </span>
-        <input
-          type="text"
-          className="pdm-search"
-          placeholder="Search machine ID..."
-          value={search}
-          onChange={(e) => handleSearch(e.target.value)}
-          aria-label="Search by machine ID"
-        />
+        <div className="pdm-phead-actions">
+          <input
+            type="text"
+            className="pdm-search"
+            placeholder="Search machine ID..."
+            value={search}
+            onChange={(e) => handleSearch(e.target.value)}
+            aria-label="Search by machine ID"
+          />
+          <button
+            type="button"
+            className="pdm-export-btn"
+            onClick={() => exportPredictionsXlsx(machines)}
+            title="Export all machine predictions as a styled Excel report"
+          >
+            ⬇ Export Excel
+          </button>
+        </div>
       </div>
 
       <table className="pdm-table">

@@ -4,8 +4,8 @@
     {
       "name": "stem-prototype",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--prefix", "stem_prototype_project"],
-      "port": 5173
+      "runtimeArgs": ["run", "dev", "--prefix", "stem_prototype_project", "--", "--port", "5180", "--strictPort"],
+      "port": 5180
     }
   ]
 }
