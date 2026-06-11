@@ -21,22 +21,7 @@ const INTERVALS: { value: DataSettings["refreshIntervalMin"]; label: string }[] 
   { value: 0,  label: "Manual" },
 ];
 
-const EXPORTS: { key: keyof DataSettings["exportSelections"]; label: string; note?: string }[] = [
-  { key: "predictions", label: "Predictions" },
-  { key: "maintenance", label: "Maintenance Jobs" },
-  { key: "failures",    label: "Failure History" },
-  { key: "raw",         label: "Raw sensor data", note: "large file" },
-];
-
 export default function DataSourcesTab({ value, onChange }: Props) {
-  const toggleExport = (k: keyof DataSettings["exportSelections"]) =>
-    onChange({
-      ...value,
-      exportSelections: { ...value.exportSelections, [k]: !value.exportSelections[k] },
-    });
-
-  const anyExportSelected = Object.values(value.exportSelections).some(Boolean);
-
   return (
     <div className="pdm-settings-panel">
       <h2 className="pdm-settings-h">Data Sources</h2>
@@ -96,36 +81,6 @@ export default function DataSourcesTab({ value, onChange }: Props) {
       </div>
 
       <XlsxUploader />
-
-      <h3 className="pdm-settings-h3">Export Data</h3>
-      <div className="pdm-toggle-list">
-        {EXPORTS.map((e) => (
-          <label key={e.key} className="pdm-toggle-row">
-            <input
-              type="checkbox"
-              checked={value.exportSelections[e.key]}
-              onChange={() => toggleExport(e.key)}
-            />
-            <span>
-              {e.label} <span style={{ color: "var(--ink-muted)", fontSize: 11 }}>(CSV)</span>
-              {e.note && (
-                <span style={{ color: "var(--risk-warning)", fontSize: 11, marginLeft: 6 }}>
-                  · {e.note}
-                </span>
-              )}
-            </span>
-          </label>
-        ))}
-      </div>
-
-      <button
-        type="button"
-        className="pdm-modal-btn pdm-modal-confirm"
-        style={{ marginTop: 10 }}
-        disabled={!anyExportSelected}
-      >
-        ▼ Download Selected
-      </button>
     </div>
   );
 }

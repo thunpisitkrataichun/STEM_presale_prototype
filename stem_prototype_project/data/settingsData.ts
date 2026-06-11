@@ -69,12 +69,6 @@ export interface TeamSettings {
 
 export interface DataSettings {
   refreshIntervalMin: 1 | 5 | 15 | 0;  // 0 = manual
-  exportSelections: {
-    predictions: boolean;
-    maintenance: boolean;
-    failures: boolean;
-    raw: boolean;
-  };
 }
 
 export interface SettingsState {
@@ -145,12 +139,6 @@ export const DEFAULT_SETTINGS: SettingsState = {
   },
   data: {
     refreshIntervalMin: 5,
-    exportSelections: {
-      predictions: true,
-      maintenance: true,
-      failures: false,
-      raw: false,
-    },
   },
 };
 

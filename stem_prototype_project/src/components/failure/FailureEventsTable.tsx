@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { COMPONENT_COLOR, type FailureEvent, type FailureComponent } from "../../../data/failureData";
 import { COMPONENT_LABEL } from "../../lib/componentLabels";
+import { exportFailuresXlsx } from "../../utils/exportFailures";
 import { useDataContext } from "../../context/DataContext";
 import Pagination from "../overview/Pagination";
 
@@ -66,13 +67,23 @@ export default function FailureEventsTable({
     <div className="pdm-table-wrap">
       <div className="pdm-phead">
         <span className="pdm-pt">Failure Events History</span>
-        <input
-          type="text"
-          className="pdm-search"
-          placeholder="Search machine ID..."
-          value={search}
-          onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-        />
+        <div className="pdm-phead-actions">
+          <input
+            type="text"
+            className="pdm-search"
+            placeholder="Search machine ID..."
+            value={search}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+          />
+          <button
+            type="button"
+            className="pdm-export-btn"
+            onClick={() => exportFailuresXlsx(FAILURE_EVENTS)}
+            title="Export all failure events as a styled Excel report"
+          >
+            ⬇ Export Excel
+          </button>
+        </div>
       </div>
 
       <div className="pdm-chip-row" style={{ marginBottom: 10 }}>
